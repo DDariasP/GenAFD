@@ -126,7 +126,7 @@ public class MyLexer extends Lexer implements MyConstants {
 			case 6: return new Token(ID,lexeme, row, column);
 			case 9: return new Token(EQ,lexeme, row, column);
 			case 10: return new Token(OR, lexeme, row, column);
-			case 11: return new Token(SEMICOLON, lexeme, row, column);
+			case 11: return new Token(SEMI, lexeme, row, column);
 			case 12: return new Token(LPAREN, lexeme, row, column);
 			case 13: return new Token(RPAREN, lexeme, row, column);
 			case 14: return new Token(STAR, lexeme, row, column);

@@ -47,7 +47,7 @@ public interface MyConstants {
     /**
      * Punto y coma ";"
      */
-    public int SEMICOLON = 7;
+    public int SEMI = 7;
 
     /**
      * Parentesis abierto "("

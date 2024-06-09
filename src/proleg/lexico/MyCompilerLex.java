@@ -1,6 +1,6 @@
+package proleg.lexico;
 
 import java.io.*;
-import proleg.lexico.*;
 
 /**
  * Clase que desarrolla el punto de entrada al compilador.
@@ -8,7 +8,7 @@ import proleg.lexico.*;
  * @author Diego Francisco Darias Pino
  *
  */
-public class MyCompiler {
+public class MyCompilerLex {
 
     /**
      * Punto de entrada de la aplicacion
@@ -16,7 +16,7 @@ public class MyCompiler {
      * @param args
      */
     public static void main(String[] args) {
-        File mainfile = new File("Ejemplo.lex");
+        File mainfile = new File("Ejemplo.txt");
         try {
             File outputfile = new File("Output.txt");
             if (outputfile.exists()) {
@@ -50,7 +50,6 @@ public class MyCompiler {
     /**
      * Genera el fichero de error
      *
-     * @param workingdir Directorio de trabajo
      * @param e Error a mostrar
      */
     private static void printError(String filename, Throwable e) {
