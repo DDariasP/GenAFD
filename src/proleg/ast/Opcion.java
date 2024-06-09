@@ -9,11 +9,17 @@ import java.util.ArrayList;
 public class Opcion implements INodo {
 
     private final int ID;
+    private final String tipo;
     private final ArrayList<INodo> hijos;
 
-    public Opcion(int n) {
+    public Opcion(int n, String s) {
         ID = n;
+        tipo = s;
         hijos = new ArrayList<>();
+    }
+
+    public String getTipo() {
+        return tipo;
     }
 
     @Override
@@ -35,5 +41,4 @@ public class Opcion implements INodo {
     public void setHijoN(INodo n) {
         hijos.add(n);
     }
-
 }
