@@ -35,7 +35,6 @@
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF   //
 // THE POSSIBILITY OF SUCH DAMAGE.                                  //
 //------------------------------------------------------------------//
-
 //------------------------------------------------------------------//
 //                      Universidad de Huelva                       //
 //           Departamento de Tecnolog�as de la Informaci�n          //
@@ -47,7 +46,6 @@
 //                  Compilador del lenguaje Tinto                   //
 //                                                                  //
 //------------------------------------------------------------------//
-
 package proleg.sintactico;
 
 import proleg.lexico.MyConstants;
@@ -55,79 +53,87 @@ import proleg.lexico.Token;
 
 /**
  * Clase que describe un excepci�n sint�ctica
- * 
+ *
  * @author Francisco Jos� Moreno Velo
  */
 public class SintaxException extends Exception implements MyConstants {
 
-	/**
-	 * Constante asignada al objeto serializable
-	 */
-	private static final long serialVersionUID = 20080002L;
+    /**
+     * Constante asignada al objeto serializable
+     */
+    private static final long serialVersionUID = 20080002L;
 
-	/**
-	 * Mensaje de error
-	 */
-	private String msg;
-	
-	/**
-	 * Constructor con un solo tipo esperado
-	 * @param token
-	 * @param expected
-	 */
-	public SintaxException(Token token, int expected) 
-	{
-		this.msg = "Sintax exception at row "+token.getRow();
-		msg += ", column "+token.getColumn()+".\n";
-		msg += "  Found "+token.getLexeme()+"\n";
-		msg += "  while expecting "+getLexemeForKind(expected)+".\n";
-	}
-	
-	/**
-	 * Constructor con una lista de tipos esperados
-	 * @param token
-	 * @param expected
-	 */
-	public SintaxException(Token token, int[] expected) 
-	{
-		this.msg = "Sintax exception at row "+token.getRow();
-		msg += ", column "+token.getColumn()+".\n";
-		msg += "  Found "+token.getLexeme()+"\n";
-		msg += "  while expecting one of\n";
-		for(int i=0; i<expected.length; i++) 
-		{
-			msg += "    "+getLexemeForKind(expected[i])+"\n";
-		}
-	}
-	
-	/**
-	 * Obtiene el mensaje de error
-	 */
-	public String toString() 
-	{
-		return this.msg;
-	}
-	
-	/**
-	 * Descripcion del token
-	 * @param kind
-	 * @return
-	 */
-	private String getLexemeForKind(int kind) 
-	{
-		switch(kind) 
-		{
-			case ID: return "IDENTIFIER";
-			case SYMBOL: return "LITERAL";
-			case EQ: return "::=";
-			case OR: return "|";
-			case SEMI: return ";";
-			case LPAREN: return "(";
-			case RPAREN: return ")";
-                        case STAR: return "*";
-			case PLUS: return "+";
-			case HOOK: return "?";
-			default: return "";
-		}
-	}
+    /**
+     * Mensaje de error
+     */
+    private String msg;
+
+    /**
+     * Constructor con un solo tipo esperado
+     *
+     * @param token
+     * @param expected
+     */
+    public SintaxException(Token token, int expected) {
+        this.msg = "Sintax exception at row " + token.getRow();
+        msg += ", column " + token.getColumn() + ".\n";
+        msg += "  Found " + token.getLexeme() + "\n";
+        msg += "  while expecting " + getLexemeForKind(expected) + ".\n";
+    }
+
+    /**
+     * Constructor con una lista de tipos esperados
+     *
+     * @param token
+     * @param expected
+     */
+    public SintaxException(Token token, int[] expected) {
+        this.msg = "Sintax exception at row " + token.getRow();
+        msg += ", column " + token.getColumn() + ".\n";
+        msg += "  Found " + token.getLexeme() + "\n";
+        msg += "  while expecting one of\n";
+        for (int i = 0; i < expected.length; i++) {
+            msg += "    " + getLexemeForKind(expected[i]) + "\n";
+        }
+    }
+
+    /**
+     * Obtiene el mensaje de error
+     */
+    public String toString() {
+        return this.msg;
+    }
+
+    /**
+     * Descripcion del token
+     *
+     * @param kind
+     * @return
+     */
+    private String getLexemeForKind(int kind) {
+        switch (kind) {
+            case ID:
+                return "IDENTIFIER";
+            case SYMBOL:
+                return "LITERAL";
+            case EQ:
+                return "::=";
+            case OR:
+                return "|";
+            case SEMI:
+                return ";";
+            case LPAREN:
+                return "(";
+            case RPAREN:
+                return ")";
+            case STAR:
+                return "*";
+            case PLUS:
+                return "+";
+            case HOOK:
+                return "?";
+            default:
+                return "";
+        }
+    }
 }
