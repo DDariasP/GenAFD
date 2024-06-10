@@ -42,21 +42,33 @@ public class AST {
     }
 
     private static String pintarHijo(INodo a, int numh, int nivel) {
-        String tab = "\n|";
-        for (int i = 0; i < nivel; i++) {
-            tab = tab + "   ";
-        }
-        String output = tab + "|--- ";
-
+        String output = "";
         INodo hijo = a.getHijoN(numh);
+        String tab = "\n";
         switch (hijo.getID()) {
             case MyConstants.SYMBOL:
+                for (int i = 0; i < nivel; i++) {
+                    if (i % 2 == 0) {
+                        tab = tab + "|   ";
+                    } else {
+                        tab = tab + "    ";
+                    }
+                }
+                output = tab + "|---";
                 output = output + pintarBase((Base) hijo);
                 break;
             case MyConstants.OR:
             case MyConstants.STAR:
             case MyConstants.PLUS:
             case MyConstants.HOOK:
+                for (int i = 0; i < nivel; i++) {
+                    if (i % 2 == 0) {
+                        tab = tab + "|   ";
+                    } else {
+                        tab = tab + "    ";
+                    }
+                }
+                output = tab + "|---";
                 output = output + pintarOperacion(((Operacion) hijo), nivel + 1);
                 break;
             default:

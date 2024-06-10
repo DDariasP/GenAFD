@@ -1,12 +1,12 @@
 Comment
-||--- Base: 'b'
-||--- Base: 'a'
-||--- Operacion: *
-|      |--- Operacion: *
-|            |--- Base: 'a'
-|      |--- Base: 'o'
-|      |--- Operacion: |
-|      |--- Base: 'b'
-||--- Operacion: +
-|      |--- Base: 'a'
-||--- Base: 'b'
+|---Base: 'b'
+|---Base: 'a'
+|---Operacion: *
+|       |---Operacion: *
+|       |       |---Base: 'a'
+|       |---Base: 'o'
+|       |---Operacion: |
+|       |---Base: 'b'
+|---Operacion: +
+|       |---Base: 'a'
+|---Base: 'b'
