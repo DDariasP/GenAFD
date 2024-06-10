@@ -24,6 +24,8 @@ public class MyETDSDesc implements MyConstants {
      */
     private Token nextToken;
 
+    private AST ast;
+
     /**
      * Metodo de analisis de un fichero
      *
@@ -33,7 +35,7 @@ public class MyETDSDesc implements MyConstants {
      * @throws proleg.sintactico.SintaxException
      */
     public boolean parse(File file) throws IOException, SintaxException {
-        AST ast = new AST();
+        ast = new AST();
         INodo F_h = ast.arbol;
         this.lexer = new MyLexer(file);
         this.nextToken = lexer.getNextToken();
@@ -74,12 +76,11 @@ public class MyETDSDesc implements MyConstants {
         int[] expected = {ID};
         switch (nextToken.getKind()) {
             case ID:
-                Token tk1 = match(ID);
-                Fichero F1_h = (Fichero) F_h;
-                F1_h.setID(tk1.getKind());
-                F1_h.setNombre(tk1.getLexeme());
+                Token tk = match(ID);
+                F_h.setID(tk.getKind());
+                F_h.setNombre(tk.getLexeme());
                 match(EQ);
-                INodo E_s = parseE(F1_h);
+                INodo E_s = parseE(F_h);
                 F_s = E_s;
                 match(SEMI);
                 break;
@@ -149,7 +150,7 @@ public class MyETDSDesc implements MyConstants {
                 Token tk1 = match(SYMBOL);
                 Base B1_s = new Base();
                 B1_s.setID(tk1.getKind());
-                B1_s.setSimbolo(tk1.getLexeme());
+                B1_s.setNombre(tk1.getLexeme());
                 B_h.addHijo(B1_s);
                 B_s = B_h;
                 break;
@@ -158,7 +159,7 @@ public class MyETDSDesc implements MyConstants {
                 Token tk2 = match(LPAREN);
                 Operacion B2_s = new Operacion();
                 B2_s.setID(tk2.getKind());
-                B2_s.setTipo(tk2.getLexeme());
+                B2_s.setNombre(tk2.getLexeme());
                 INodo E_s = parseE(B2_s);
                 match(RPAREN);
                 INodo O_s = parseO(E_s);
@@ -210,26 +211,23 @@ public class MyETDSDesc implements MyConstants {
             case STAR:
                 System.out.println("O-*");
                 Token tk1 = match(STAR);
-                Operacion O1_s = (Operacion) O_h;
-                O1_s.setID(tk1.getKind());
-                O1_s.setTipo(tk1.getLexeme());
-                O_s = O1_s;
+                O_h.setID(tk1.getKind());
+                O_h.setNombre(tk1.getLexeme());
+                O_s = O_h;
                 break;
             case PLUS:
                 System.out.println("O-+");
                 Token tk2 = match(PLUS);
-                Operacion O2_s = (Operacion) O_h;
-                O2_s.setID(tk2.getKind());
-                O2_s.setTipo(tk2.getLexeme());
-                O_s = O2_s;
+                O_h.setID(tk2.getKind());
+                O_h.setNombre(tk2.getLexeme());
+                O_s = O_h;
                 break;
             case HOOK:
                 System.out.println("O-?");
                 Token tk3 = match(HOOK);
-                Operacion O3_s = (Operacion) O_h;
-                O3_s.setID(tk3.getKind());
-                O3_s.setTipo(tk3.getLexeme());
-                O_s = O3_s;
+                O_h.setID(tk3.getKind());
+                O_h.setNombre(tk3.getLexeme());
+                O_s = O_h;
                 break;
             case OR:
             case SYMBOL:
@@ -259,7 +257,7 @@ public class MyETDSDesc implements MyConstants {
                 Token tk1 = match(OR);
                 Operacion AA1_s = new Operacion();
                 AA1_s.setID(tk1.getKind());
-                AA1_s.setTipo(tk1.getLexeme());
+                AA1_s.setNombre(tk1.getLexeme());
                 AA_h.addHijo(AA1_s);
                 INodo D_s = parseD(AA_h);
                 INodo AA2_s = parseAA(D_s);
@@ -274,6 +272,10 @@ public class MyETDSDesc implements MyConstants {
                 throw new SintaxException(nextToken, expected);
         }
         return AA_s;
+    }
+
+    public AST getAST() {
+        return ast;
     }
 
 }

@@ -44,9 +44,9 @@ public class MyCompilerSin {
             File errorfile = new File("Errors.txt");
             if (errorfile.exists()) {
                 errorfile.delete();
-                System.out.println("\nArchivo " + errorfile.getName() + " sobreescrito.\n");
+                System.out.println("\nArchivo " + errorfile.getName() + " sobreescrito.");
             } else {
-                System.out.println("\nArchivo " + errorfile.getName() + " creado.\n");
+                System.out.println("\nArchivo " + errorfile.getName() + " creado.");
             }
             errorfile.createNewFile();
             PrintStream errorStream = new PrintStream(errorfile);
@@ -67,9 +67,9 @@ public class MyCompilerSin {
             File outputfile = new File("Output.txt");
             if (outputfile.exists()) {
                 outputfile.delete();
-                System.out.println("\nArchivo " + outputfile.getName() + " sobreescrito.\n");
+                System.out.println("\nArchivo " + outputfile.getName() + " sobreescrito.");
             } else {
-                System.out.println("\nArchivo " + outputfile.getName() + " creado.\n");
+                System.out.println("\nArchivo " + outputfile.getName() + " creado.");
             }
             outputfile.createNewFile();
             PrintStream stream = new PrintStream(outputfile);

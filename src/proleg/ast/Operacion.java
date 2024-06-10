@@ -9,19 +9,11 @@ import java.util.ArrayList;
 public class Operacion implements INodo {
 
     private int ID;
-    private String tipo;
+    private String nombre;
     private ArrayList<INodo> hijos;
 
     public Operacion() {
         hijos = new ArrayList<>();
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String s) {
-        tipo = s;
     }
 
     @Override
@@ -35,6 +27,16 @@ public class Operacion implements INodo {
     }
 
     @Override
+    public String getNombre() {
+        return nombre;
+    }
+
+    @Override
+    public void setNombre(String s) {
+        nombre = s;
+    }
+
+    @Override
     public int getNumHijos() {
         return hijos.size();
     }
@@ -42,6 +44,11 @@ public class Operacion implements INodo {
     @Override
     public INodo getHijoN(int n) {
         return hijos.get(n);
+    }
+
+    @Override
+    public ArrayList<INodo> getListaH() {
+        return hijos;
     }
 
     @Override

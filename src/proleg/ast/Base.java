@@ -1,5 +1,7 @@
 package proleg.ast;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Diego Francisco Darias Pino
@@ -7,18 +9,10 @@ package proleg.ast;
 public class Base implements INodo {
 
     private int ID;
-    private String simbolo;
+    private String nombre;
 
     public Base() {
         //
-    }
-
-    public String getSimbolo() {
-        return simbolo;
-    }
-
-    public void setSimbolo(String s) {
-        simbolo = s;
     }
 
     @Override
@@ -32,12 +26,27 @@ public class Base implements INodo {
     }
 
     @Override
+    public String getNombre() {
+        return nombre;
+    }
+
+    @Override
+    public void setNombre(String s) {
+        nombre = s;
+    }
+
+    @Override
     public int getNumHijos() {
         return 0;
     }
 
     @Override
     public INodo getHijoN(int n) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<INodo> getListaH() {
         return null;
     }
 

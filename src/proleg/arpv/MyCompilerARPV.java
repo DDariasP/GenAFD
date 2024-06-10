@@ -1,6 +1,7 @@
-package proleg.lexico;
+package proleg.arpv;
 
 import java.io.*;
+import proleg.semantico.*;
 
 /**
  * Clase que desarrolla el punto de entrada al compilador.
@@ -8,7 +9,7 @@ import java.io.*;
  * @author Diego Francisco Darias Pino
  *
  */
-public class MyCompilerLex {
+public class MyCompilerARPV {
 
     /**
      * Punto de entrada de la aplicacion
@@ -18,32 +19,20 @@ public class MyCompilerLex {
     public static void main(String[] args) {
         File mainfile = new File("Ejemplo.txt");
         try {
-            File outputfile = new File("Output.txt");
-            if (outputfile.exists()) {
-                outputfile.delete();
-                System.out.println("\nArchivo " + outputfile.getName() + " sobreescrito.");
+            MyETDSDesc parser = new MyETDSDesc();
+            if (parser.parse(mainfile)) {
+                printOutput("Correcto");
+                MyARPV arpv = new MyARPV(parser.getAST());
             } else {
-                System.out.println("\nArchivo " + outputfile.getName() + " creado.");
-            }
-            outputfile.createNewFile();
-            PrintStream stream = new PrintStream(outputfile);
-
-            MyLexer lexer = new MyLexer(mainfile);
-            Token tk;
-            do {
-                tk = lexer.getNextToken();
-                stream.println(tk.toString());
-            } while (tk.getKind() != Token.EOF);
-            stream.close();
-
-            File errorfile = new File("Errors.txt");
-            if (errorfile.exists()) {
-                errorfile.delete();
+                printOutput("Incorrecto");
             }
         } catch (Error err) {
             printError(mainfile.getName(), err);
+            printOutput("Incorrecto");
+
         } catch (Exception ex) {
             printError(mainfile.getName(), ex);
+            printOutput("Incorrecto");
         }
     }
 
@@ -66,6 +55,28 @@ public class MyCompilerLex {
             errorStream.println("[File " + filename + "] 1 error found:");
             errorStream.println(e.toString());
             errorStream.close();
+        } catch (Exception ex) {
+        }
+    }
+
+    /**
+     * Genera el fichero de salida
+     *
+     * @param e Error a mostrar
+     */
+    private static void printOutput(String msg) {
+        try {
+            File outputfile = new File("Output.txt");
+            if (outputfile.exists()) {
+                outputfile.delete();
+                System.out.println("\nArchivo " + outputfile.getName() + " sobreescrito.");
+            } else {
+                System.out.println("\nArchivo " + outputfile.getName() + " creado.");
+            }
+            outputfile.createNewFile();
+            PrintStream stream = new PrintStream(outputfile);
+            stream.println(msg);
+            stream.close();
         } catch (Exception ex) {
         }
     }

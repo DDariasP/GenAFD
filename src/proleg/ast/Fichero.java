@@ -16,14 +16,6 @@ public class Fichero implements INodo {
         hijos = new ArrayList<>();
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String s) {
-        nombre = s;
-    }
-
     @Override
     public int getID() {
         return ID;
@@ -35,6 +27,16 @@ public class Fichero implements INodo {
     }
 
     @Override
+    public String getNombre() {
+        return nombre;
+    }
+
+    @Override
+    public void setNombre(String s) {
+        nombre = s;
+    }
+
+    @Override
     public int getNumHijos() {
         return hijos.size();
     }
@@ -42,6 +44,11 @@ public class Fichero implements INodo {
     @Override
     public INodo getHijoN(int n) {
         return hijos.get(n);
+    }
+
+    @Override
+    public ArrayList<INodo> getListaH() {
+        return hijos;
     }
 
     @Override

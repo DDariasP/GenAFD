@@ -3,8 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/diego/NetBeansProjects/GenAFD/src/proleg/arpv/Expresion.java</file>
+            <file>file:/home/diego/NetBeansProjects/GenAFD/src/proleg/arpv/Regla.java</file>
+            <file>file:/home/diego/NetBeansProjects/GenAFD/src/proleg/arpv/Simbolo.java</file>
+            <file>file:/home/diego/NetBeansProjects/GenAFD/src/proleg/arpv/MyARPV.java</file>
+            <file>file:/home/diego/NetBeansProjects/GenAFD/src/proleg/arpv/MyCompilerARPV.java</file>
             <file>file:/home/diego/NetBeansProjects/GenAFD/src/proleg/ast/AST.java</file>
+            <file>file:/home/diego/NetBeansProjects/GenAFD/src/proleg/sintactico/MyEspecificacion.java</file>
         </group>
     </open-files>
 </project-private>
