@@ -8,13 +8,11 @@ import java.util.ArrayList;
  */
 public class Fichero implements INodo {
 
-    private final int ID;
-    private final String nombre;
-    private final ArrayList<INodo> hijos;
+    private int ID;
+    private String nombre;
+    private ArrayList<INodo> hijos;
 
-    public Fichero(int n, String s) {
-        ID = n;
-        nombre = s;
+    public Fichero() {
         hijos = new ArrayList<>();
     }
 
@@ -22,9 +20,18 @@ public class Fichero implements INodo {
         return nombre;
     }
 
+    public void setNombre(String s) {
+        nombre = s;
+    }
+
     @Override
     public int getID() {
         return ID;
+    }
+
+    @Override
+    public void setID(int n) {
+        ID = n;
     }
 
     @Override
@@ -38,7 +45,7 @@ public class Fichero implements INodo {
     }
 
     @Override
-    public void setHijoN(INodo n) {
+    public void addHijo(INodo n) {
         hijos.add(n);
     }
 

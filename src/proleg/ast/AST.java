@@ -1,38 +1,39 @@
 package proleg.ast;
 
+import proleg.lexico.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import proleg.lexico.*;
 
 /**
  *
- * @author diego
+ * @author Diego Francisco Darias Pino
  */
 public class AST {
 
-    private final Fichero arbol;
+    public INodo arbol;
 
-    public AST(Fichero a) {
-        arbol = a;
+    public AST() {
+        arbol = new Fichero();
     }
 
     public void print() {
+        Fichero ast = (Fichero) arbol;
         try {
-            String filename = arbol.getNombre() + "txt";
-            File ast = new File(filename);
-            if (ast.exists()) {
-                ast.delete();
-                System.out.println("\nArchivo " + ast.getName() + " sobreescrito.\n");
+            String filename = ast.getNombre() + ".txt";
+            File file = new File(filename);
+            if (file.exists()) {
+                file.delete();
+                System.out.println("\nArchivo " + file.getName() + " sobreescrito.\n");
             } else {
-                System.out.println("\nArchivo " + ast.getName() + " creado.\n");
+                System.out.println("\nArchivo " + file.getName() + " creado.\n");
             }
-            ast.createNewFile();
+            file.createNewFile();
             FileWriter writer = new FileWriter(filename);
 
-            writer.write(arbol.getNombre());
-            for (int numh = 1; numh < arbol.getNumHijos(); numh++) {
-                writer.write(pintarHijo(arbol, numh, 0));
+            writer.write(ast.getNombre());
+            for (int numh = 0; numh < ast.getNumHijos(); numh++) {
+                writer.write(pintarHijo(ast, numh, 0));
             }
             writer.close();
         } catch (IOException e) {
@@ -41,26 +42,22 @@ public class AST {
     }
 
     private static String pintarHijo(INodo a, int numh, int nivel) {
-        String tab = "\n ";
+        String tab = "\n|";
         for (int i = 0; i < nivel; i++) {
             tab = tab + "   ";
         }
         String output = tab + "|--- ";
+
         INodo hijo = a.getHijoN(numh);
         switch (hijo.getID()) {
             case MyConstants.SYMBOL:
-                output = pintarBase((Base) a);
+                output = output + pintarBase((Base) hijo);
                 break;
             case MyConstants.OR:
-            case MyConstants.HOOK:
-                output = pintarOpcion(((Opcion) a), nivel + 1);
-                break;
             case MyConstants.STAR:
             case MyConstants.PLUS:
-                output = pintarRepeticion(((Repeticion) a), nivel + 1);
-                break;
-            case MyConstants.RPAREN:
-                output = pintarSecuencia(((Secuencia) a), nivel + 1);
+            case MyConstants.HOOK:
+                output = output + pintarOperacion(((Operacion) hijo), nivel + 1);
                 break;
             default:
                 throw new AssertionError();
@@ -73,25 +70,9 @@ public class AST {
         return output;
     }
 
-    private static String pintarOpcion(Opcion h, int nivel) {
-        String output = "Opcion: " + h.getTipo();
-        for (int numh = 1; numh < h.getNumHijos(); numh++) {
-            output = output + pintarHijo(((INodo) h), numh, nivel + 1);
-        }
-        return output;
-    }
-
-    private static String pintarRepeticion(Repeticion h, int nivel) {
-        String output = "Repeticion: " + h.getTipo();
-        for (int numh = 1; numh < h.getNumHijos(); numh++) {
-            output = output + pintarHijo(((INodo) h), numh, nivel + 1);
-        }
-        return output;
-    }
-
-    private static String pintarSecuencia(Secuencia h, int nivel) {
-        String output = "Secuencia";
-        for (int numh = 1; numh < h.getNumHijos(); numh++) {
+    private static String pintarOperacion(Operacion h, int nivel) {
+        String output = "Operacion: " + h.getTipo();
+        for (int numh = 0; numh < h.getNumHijos(); numh++) {
             output = output + pintarHijo(((INodo) h), numh, nivel + 1);
         }
         return output;

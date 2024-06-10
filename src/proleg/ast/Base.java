@@ -6,21 +6,29 @@ package proleg.ast;
  */
 public class Base implements INodo {
 
-    private final int ID;
-    private final char simbolo;
+    private int ID;
+    private String simbolo;
 
-    public Base(int n, char c) {
-        ID = n;
-        simbolo = c;
+    public Base() {
+        //
     }
 
-    public char getSimbolo() {
+    public String getSimbolo() {
         return simbolo;
+    }
+
+    public void setSimbolo(String s) {
+        simbolo = s;
     }
 
     @Override
     public int getID() {
         return ID;
+    }
+
+    @Override
+    public void setID(int n) {
+        ID = n;
     }
 
     @Override
@@ -34,7 +42,7 @@ public class Base implements INodo {
     }
 
     @Override
-    public void setHijoN(INodo n) {
+    public void addHijo(INodo n) {
         //
     }
 

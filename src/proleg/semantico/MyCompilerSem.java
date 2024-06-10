@@ -1,7 +1,6 @@
 package proleg.semantico;
 
 import java.io.*;
-import proleg.ast.*;
 
 /**
  * Clase que desarrolla el punto de entrada al compilador.

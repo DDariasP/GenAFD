@@ -6,15 +6,13 @@ import java.util.ArrayList;
  *
  * @author Diego Francisco Darias Pino
  */
-public class Repeticion implements INodo {
+public class Operacion implements INodo {
 
-    private final int ID;
-    private final String tipo;
-    private final ArrayList<INodo> hijos;
+    private int ID;
+    private String tipo;
+    private ArrayList<INodo> hijos;
 
-    public Repeticion(int n, String s) {
-        ID = n;
-        tipo = s;
+    public Operacion() {
         hijos = new ArrayList<>();
     }
 
@@ -22,9 +20,18 @@ public class Repeticion implements INodo {
         return tipo;
     }
 
+    public void setTipo(String s) {
+        tipo = s;
+    }
+
     @Override
     public int getID() {
         return ID;
+    }
+
+    @Override
+    public void setID(int n) {
+        ID = n;
     }
 
     @Override
@@ -38,7 +45,7 @@ public class Repeticion implements INodo {
     }
 
     @Override
-    public void setHijoN(INodo n) {
+    public void addHijo(INodo n) {
         hijos.add(n);
     }
 
