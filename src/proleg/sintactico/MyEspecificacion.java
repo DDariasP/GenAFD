@@ -14,25 +14,25 @@ public class MyEspecificacion {
     public static ArrayList<Regla> crear() {
         listaR = new ArrayList<>();
 
-        Simbolo F = new Simbolo(true, "F");
-        Simbolo E = new Simbolo(true, "E");
-        Simbolo D = new Simbolo(true, "D");
-        Simbolo A = new Simbolo(true, "A");
-        Simbolo B = new Simbolo(true, "B");
-        Simbolo BB = new Simbolo(true, "BB");
-        Simbolo O = new Simbolo(true, "O");
+        Simbolo F = new Simbolo(false, "F");
+        Simbolo E = new Simbolo(false, "E");
+        Simbolo D = new Simbolo(false, "D");
+        Simbolo A = new Simbolo(false, "A");
+        Simbolo B = new Simbolo(false, "B");
+        Simbolo BB = new Simbolo(false, "BB");
+        Simbolo O = new Simbolo(false, "O");
 
-        Simbolo id = new Simbolo(false, "id");
-        Simbolo eq = new Simbolo(false, "eq");
-        Simbolo semi = new Simbolo(false, "semi");
-        Simbolo or = new Simbolo(false, "or");
-        Simbolo lambda = new Simbolo(false, "lambda");
-        Simbolo sym = new Simbolo(false, "sym");
-        Simbolo lparen = new Simbolo(false, "lparen");
-        Simbolo rparen = new Simbolo(false, "rparen");
-        Simbolo star = new Simbolo(false, "star");
-        Simbolo plus = new Simbolo(false, "plus");
-        Simbolo hook = new Simbolo(false, "hook");
+        Simbolo id = new Simbolo(true, "id");
+        Simbolo eq = new Simbolo(true, "eq");
+        Simbolo semi = new Simbolo(true, "semi");
+        Simbolo or = new Simbolo(true, "or");
+        Simbolo lambda = new Simbolo(true, "lambda");
+        Simbolo sym = new Simbolo(true, "sym");
+        Simbolo lparen = new Simbolo(true, "lparen");
+        Simbolo rparen = new Simbolo(true, "rparen");
+        Simbolo star = new Simbolo(true, "star");
+        Simbolo plus = new Simbolo(true, "plus");
+        Simbolo hook = new Simbolo(true, "hook");
 
         Regla R0 = new Regla("R0");
         R0.simL = F;
