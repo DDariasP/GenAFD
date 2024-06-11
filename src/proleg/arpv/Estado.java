@@ -9,9 +9,8 @@ import java.util.ArrayList;
 public class Estado {
 
     public static int NE = 0;
-
     public String nombre;
-    public ArrayList<Elemento> elem;
+    public ArrayList<Regla> elem;
 
     public Estado() {
         nombre = "s" + NE;
@@ -19,15 +18,20 @@ public class Estado {
         elem = new ArrayList<>();
     }
 
+    public Estado(String s) {
+        nombre = s;
+        elem = new ArrayList<>();
+    }
+
     public static void transiciones(Estado s, ArrayList<Estado> listaS) {
         //guarda el Estado en la tabla
         listaS.add(s);
         //crea un proto-Estado
-        ArrayList<Elemento> listaE = new ArrayList<>();
+        ArrayList<Regla> proto = new ArrayList<>();
         //mira todas los Elemento del Estado
         for (int i = 0; i < s.elem.size(); i++) {
             //analiza la Regla del Elemento tomado
-            Regla sigR = s.elem.get(i).regla;
+            Regla sigR = s.elem.get(i);
             Simbolo simR;
             //si el punto no esta al final
             if (sigR.punto < sigR.simR.size()) {
@@ -37,15 +41,13 @@ public class Estado {
                 if (!simR.terminal) {
                     //expande la lista de Regla
                     for (int j = 0; j < Regla.listaR.size(); j++) {
-                        Regla r = Regla.listaR.get(j);
+                        Regla nuevaR = Regla.listaR.get(j);
                         //añade las coincidencias
-                        if (simR.nombre.equals(r.simL.nombre)) {
-                            Elemento nuevoE = new Elemento(new Simbolo(true,"lambda"), r);
-                            //si el Elemento no esta ya en el proto-Estado
-                            if (!Elemento.contiene(listaE, nuevoE)) {
+                        if (simR.nombre.equals(nuevaR.simL.nombre)) {
+                            //si la regla no esta ya en el proto-Estado
+                            if (!Regla.contiene(proto, nuevaR)) {
                                 //añade el Elemento al proto-Estado
-                                listaE.add(nuevoE);
-                                System.out.println(nuevoE);
+                                proto.add(nuevaR);
                             }
                         }
                     }
@@ -53,33 +55,52 @@ public class Estado {
                 //avanza el punto en la Regla
                 Regla nuevaR = new Regla(sigR);
                 nuevaR.punto++;
-                //crea el Elemento con su Simbolo y su Regla
-                Elemento nuevoE = new Elemento(simR, nuevaR);
-                //si el Elemento no esta ya en el proto-Estado
-                if (!Elemento.contiene(listaE, nuevoE)) {
-                    //añade el Elemento al proto-Estado
-                    listaE.add(nuevoE);
+
+                if (nuevaR.punto < nuevaR.simR.size()) {
+                    nuevaR.simP = nuevaR.simR.get(nuevaR.punto);
+                } else {
+                    nuevaR.simP = nuevaR.simR.get(nuevaR.punto - 1);
                 }
+                //si la Regla no esta ya en el proto-Estado
+                if (!Regla.contiene(proto, nuevaR)) {
+                    //añade la Regla al proto-Estado
+                    proto.add(nuevaR);
+                }
+            } else {
+                Simbolo simX = new Simbolo(true, "lambda");
+                sigR.simP = simX;
+                //si la Regla no esta ya en el proto-Estado
+                if (!Regla.contiene(proto, sigR)) {
+                    //añade la Regla al proto-Estado
+                    proto.add(sigR);
+                }
+
             }
         }
 
-        //si la lista de Estado NO esta vacia y NO contiene al proto-Estado
-        if (!listaE.isEmpty() && !Estado.contiene(listaS, listaE)) {
-            //crea Estado a partir de proto-Estado
-            Estado nuevoS = new Estado();
-            nuevoS.elem = listaE;
-            //analiza el nuevo Estado
-            transiciones(nuevoS, listaS);
+        //si la lista de Estado NO esta vacia
+        if (!proto.isEmpty()) {
+            //si NO contiene al proto-Estado
+            if (!proto.isEmpty() && !Estado.contiene(listaS, proto)) {
+                //crea Estado a partir de proto-Estado
+                Estado nuevoS = new Estado();
+                nuevoS.elem = proto;
+                //actualiza los destinos
+                for (int i = 0; i < s.elem.size(); i++) {
+                    s.elem.get(i).destino = nuevoS;
+                }
+                //analiza el nuevo Estado
+                transiciones(nuevoS, listaS);
+            }
         }
     }
 
-    public static boolean contiene(ArrayList<Estado> listaS, ArrayList<Elemento> listaE) {
+    public static boolean contiene(ArrayList<Estado> listaS, ArrayList<Regla> proto) {
         boolean encontrado = false;
         int pos = 0;
         while (!encontrado && pos < listaS.size()) {
             Estado sig = listaS.get(pos);
-            ArrayList<Elemento> siglistaE = sig.elem;
-            if (Elemento.iguales(siglistaE, listaE)) {
+            if (Regla.iguales(sig, proto)) {
                 encontrado = true;
             }
             pos++;

@@ -15,6 +15,8 @@ public class Regla {
     public Simbolo simL;
     public ArrayList<Simbolo> simR;
     public int punto;
+    public Simbolo simP;
+    public Estado destino;
 
     public Regla(String s) {
         nombre = s;
@@ -27,6 +29,7 @@ public class Regla {
         simL = Rx.simL;
         simR = Rx.simR;
         punto = Rx.punto;
+        simP = Rx.simP;
     }
 
     public static void clausura(ArrayList<Regla> elemRx, Regla Rx) {
@@ -36,10 +39,10 @@ public class Regla {
             if (!sigS.terminal) {
                 for (int i = 0; i < listaR.size(); i++) {
                     Regla sigR = new Regla(listaR.get(i));
-                    if (!sigR.equals(Rx)) {
-                        if (sigS.nombre.equals(sigR.simL.nombre) && !contiene(elemRx, sigR)) {
-                            clausura(elemRx, sigR);
-                        }
+                    sigR.punto++;
+                    sigR.simP = sigR.simR.get(sigR.punto);
+                    if (sigS.nombre.equals(sigR.simL.nombre) && !contiene(elemRx, sigR)) {
+                        clausura(elemRx, sigR);
                     }
                 }
             }
@@ -57,6 +60,29 @@ public class Regla {
             pos++;
         }
         return encontrado;
+    }
+
+    public static boolean iguales(Estado s, ArrayList<Regla> proto) {
+        boolean iguales = true;
+        if (s.elem.size() != proto.size()) {
+            iguales = false;
+        } else {
+            int cont = 0;
+            int size = proto.size();
+            for (int i = 0; i < size; i++) {
+                Regla sR = s.elem.get(i);
+                for (int j = 0; j < size; j++) {
+                    Regla protoR = proto.get(j);
+                    if (sR.equals(protoR)) {
+                        cont++;
+                    }
+                }
+            }
+            if (cont != size) {
+                iguales = false;
+            }
+        }
+        return iguales;
     }
 
     @Override
@@ -96,12 +122,17 @@ public class Regla {
             if (i == punto) {
                 output = output + " .";
             }
-            output = output +" "+simR.get(i);
+            output = output + " " + simR.get(i);
         }
         if (punto == simR.size()) {
             output = output + " .";
         }
-        output=output+" ]";
+        output = output + " ] => " + simP;
+        if (destino != null) {
+            output = output + " => " + destino.nombre;
+        } else {
+            output = output + " => null";
+        }
         return output;
     }
 

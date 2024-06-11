@@ -23,25 +23,23 @@ public class MyARPV implements MyConstants {
         listaS = new ArrayList<>();
         //Regla del simbolo inicial
         Regla R0 = listaR.get(0);
-        //elementos de la Regla
-        ArrayList<Regla> e0elem = new ArrayList<>();
-        Regla.clausura(e0elem, R0);
-        //guarda el Estado
+        //elementos del Estado inicial
+        ArrayList<Regla> elem0 = new ArrayList<>();
+        Regla.clausura(elem0, R0);
+        //Estado inicial
         Estado s0 = new Estado();
-        for (int i = 0; i < e0elem.size(); i++) {
-            s0.elem.add(new Elemento(new Simbolo(true, "lambda"), e0elem.get(i)));
-        }
-        
+        s0.elem = elem0;
+
         //lista de Estado sucesivos
         Estado.transiciones(s0, listaS);
-        System.out.println("\nsize="+listaS.size());
+        System.out.println("\nsize=" + listaS.size() + "\n");
         for (int i = 0; i < listaS.size(); i++) {
             System.out.println(listaS.get(i).nombre);
             for (int j = 0; j < listaS.get(i).elem.size(); j++) {
                 System.out.println(listaS.get(i).elem.get(j));
             }
+            System.out.println("");
         }
-
     }
 
 }
