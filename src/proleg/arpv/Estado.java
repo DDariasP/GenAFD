@@ -1,5 +1,7 @@
 package proleg.arpv;
 
+import proleg.ast.*;
+import proleg.lexico.*;
 import java.util.ArrayList;
 
 /**
@@ -10,7 +12,7 @@ public class Estado {
 
     public static int NE = 0;
     public String nombre;
-    public ArrayList<Regla> elem;
+    public ArrayList<Expresion> elem;
 
     public Estado() {
         nombre = "s" + NE;
@@ -27,54 +29,38 @@ public class Estado {
         //guarda el Estado en la tabla
         listaS.add(s);
         //crea un proto-Estado
-        ArrayList<Regla> proto = new ArrayList<>();
-        //mira todas los Elemento del Estado
+        ArrayList<Expresion> proto = new ArrayList<>();
+        //mira todas las Expresion del Estado
         for (int i = 0; i < s.elem.size(); i++) {
-            //analiza la Regla del Elemento tomado
-            Regla sigR = s.elem.get(i);
-            Simbolo simR;
+            //analiza la Expresion tomada
+            Expresion sigExp = s.elem.get(i);
             //si el punto no esta al final
-            if (sigR.punto < sigR.simR.size()) {
-                //el punto marca el Simbolo de transicion
-                simR = sigR.simR.get(sigR.punto);
-                //si el Simbolo de transicion es no terminal
-                if (!simR.terminal) {
-                    //expande la lista de Regla
-                    for (int j = 0; j < Regla.listaR.size(); j++) {
-                        Regla nuevaR = Regla.listaR.get(j);
-                        //añade las coincidencias
-                        if (simR.nombre.equals(nuevaR.simL.nombre)) {
-                            //si la regla no esta ya en el proto-Estado
-                            if (!Regla.contiene(proto, nuevaR)) {
-                                //añade el Elemento al proto-Estado
-                                proto.add(nuevaR);
-                            }
-                        }
-                    }
-                }
-                //avanza el punto en la Regla
-                Regla nuevaR = new Regla(sigR);
-                nuevaR.punto++;
-
-                if (nuevaR.punto < nuevaR.simR.size()) {
-                    nuevaR.simP = nuevaR.simR.get(nuevaR.punto);
+            if (sigExp.punto < sigExp.elem.size()) {
+                //avanza el punto en la Expresion
+                Expresion nuevaExp = new Expresion(sigExp);
+                nuevaExp.punto++;
+                //actualiza el simbolo de Trasicion
+                if (nuevaExp.punto < nuevaExp.elem.size()) {
+                    nuevaExp.simT = nuevaExp.elem.get(nuevaExp.punto);
                 } else {
-                    nuevaR.simP = nuevaR.simR.get(nuevaR.punto - 1);
+                    nuevaExp.simT = nuevaExp.elem.get(nuevaExp.punto - 1);
                 }
-                //si la Regla no esta ya en el proto-Estado
-                if (!Regla.contiene(proto, nuevaR)) {
-                    //añade la Regla al proto-Estado
-                    proto.add(nuevaR);
+                //si la Expresion no esta ya en el proto-Estado
+                if (!Expresion.contiene(proto, nuevaExp)) {
+                    //añade la Expresion al proto-Estado
+                    proto.add(nuevaExp);
                 }
             } else {
-                Simbolo simX = new Simbolo(true, "lambda");
-                sigR.simP = simX;
-                //si la Regla no esta ya en el proto-Estado
-                if (!Regla.contiene(proto, sigR)) {
+                //fin de la Expresion
+                sigExp.simT = new Base();
+                sigExp.simT.setID(MyConstants.BLANK);
+                sigExp.simT.setNombre("'lambda'");
+                sigExp.destino = new Estado("fin");
+                //si la Expresion no esta ya en el proto-Estado
+                if (!Expresion.contiene(proto, sigExp)) {
                     //añade la Regla al proto-Estado
-                    proto.add(sigR);
+                    proto.add(sigExp);
                 }
-
             }
         }
 
@@ -95,12 +81,12 @@ public class Estado {
         }
     }
 
-    public static boolean contiene(ArrayList<Estado> listaS, ArrayList<Regla> proto) {
+    public static boolean contiene(ArrayList<Estado> listaS, ArrayList<Expresion> proto) {
         boolean encontrado = false;
         int pos = 0;
         while (!encontrado && pos < listaS.size()) {
             Estado sig = listaS.get(pos);
-            if (Regla.iguales(sig, proto)) {
+            if (Expresion.iguales(sig.elem, proto)) {
                 encontrado = true;
             }
             pos++;

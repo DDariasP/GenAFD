@@ -2,7 +2,6 @@ package proleg.arpv;
 
 import proleg.ast.*;
 import proleg.lexico.*;
-import proleg.sintactico.*;
 import java.util.ArrayList;
 
 /**
@@ -13,22 +12,16 @@ import java.util.ArrayList;
  */
 public class MyARPV implements MyConstants {
 
-    private ArrayList<Regla> listaR;
     private ArrayList<Estado> listaS;
 
     MyARPV(AST ast) {
-        //lista de Regla de la expresion
-        listaR = MyEspecificacion.crear();
         //lista de Estado del ARPV
         listaS = new ArrayList<>();
-        //Regla del simbolo inicial
-        Regla R0 = listaR.get(0);
-        //elementos del Estado inicial
-        ArrayList<Regla> elem0 = new ArrayList<>();
-        Regla.clausura(elem0, R0);
+        //Expresion inicial
+        Expresion exp0 = new Expresion(ast);
         //Estado inicial
         Estado s0 = new Estado();
-        s0.elem = elem0;
+        s0.elem.add(exp0);
 
         //lista de Estado sucesivos
         Estado.transiciones(s0, listaS);
@@ -36,7 +29,7 @@ public class MyARPV implements MyConstants {
         for (int i = 0; i < listaS.size(); i++) {
             System.out.println(listaS.get(i).nombre);
             for (int j = 0; j < listaS.get(i).elem.size(); j++) {
-                System.out.println(listaS.get(i).elem.get(j));
+                System.out.println(listaS.get(i).elem.get(j).toString());
             }
             System.out.println("");
         }
