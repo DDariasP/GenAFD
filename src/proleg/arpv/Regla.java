@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 public class Regla {
 
-    private static ArrayList<Regla> listaR = MyEspecificacion.listaR;
+    public static ArrayList<Regla> listaR = MyEspecificacion.listaR;
     public String nombre;
     public Simbolo simL;
     public ArrayList<Simbolo> simR;
@@ -26,29 +26,32 @@ public class Regla {
         nombre = Rx.nombre;
         simL = Rx.simL;
         simR = Rx.simR;
+        punto = Rx.punto;
     }
 
-    public static void elementos(ArrayList<Regla> elemRx, Regla Rx) {
+    public static void clausura(ArrayList<Regla> elemRx, Regla Rx) {
         elemRx.add(Rx);
-        Simbolo sigS = Rx.simR.get(Rx.punto);
-        if (!sigS.terminal) {
-            for (int i = 0; i < listaR.size(); i++) {
-                Regla sigR = new Regla(listaR.get(i));
-                if (!sigR.equals(Rx)) {
-                    if (sigS.nombre.equals(sigR.simL.nombre) && !contiene(elemRx, sigR)) {
-                        elementos(elemRx, sigR);
+        if (Rx.punto < elemRx.size()) {
+            Simbolo sigS = Rx.simR.get(Rx.punto);
+            if (!sigS.terminal) {
+                for (int i = 0; i < listaR.size(); i++) {
+                    Regla sigR = new Regla(listaR.get(i));
+                    if (!sigR.equals(Rx)) {
+                        if (sigS.nombre.equals(sigR.simL.nombre) && !contiene(elemRx, sigR)) {
+                            clausura(elemRx, sigR);
+                        }
                     }
                 }
             }
         }
     }
 
-    public static boolean contiene(ArrayList<Regla> elemRx, Regla Rx) {
+    public static boolean contiene(ArrayList<Regla> lista, Regla r) {
         boolean encontrado = false;
         int pos = 0;
-        while (!encontrado && pos < elemRx.size()) {
-            Regla r = elemRx.get(pos);
-            if (r.equals(Rx)) {
+        while (!encontrado && pos < lista.size()) {
+            Regla sig = lista.get(pos);
+            if (sig.equals(r)) {
                 encontrado = true;
             }
             pos++;
@@ -87,14 +90,18 @@ public class Regla {
 
     @Override
     public String toString() {
-        String output = nombre + "-> ";
+        String output = nombre + "[ ";
         output = output + simL.nombre + " ::= ";
         for (int i = 0; i < simR.size(); i++) {
             if (i == punto) {
-                output = output + " . ";
+                output = output + " .";
             }
-            output = output + simR.get(i) + " ";
+            output = output +" "+simR.get(i);
         }
+        if (punto == simR.size()) {
+            output = output + " .";
+        }
+        output=output+" ]";
         return output;
     }
 
