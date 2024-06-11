@@ -1,9 +1,8 @@
 package proleg.arpv;
 
-import java.util.ArrayList;
-import java.util.Objects;
 import proleg.ast.*;
-import proleg.lexico.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -11,43 +10,82 @@ import proleg.lexico.*;
  */
 public class Expresion {
 
-    public ArrayList<INodo> elem;
+    public static String[] nulos = {"[", "]", ","};
+    public String[] tokens;
     public int punto;
-    public INodo simT;
     public Estado destino;
 
     public Expresion(AST ast) {
-        elem = ast.arbol.getListaH();
+        ArrayList<INodo> lista = ast.arbol.getListaH();
+        tokens = getTokens(lista);
         punto = 0;
-        simT = new Base();
-        simT.setID(elem.get(punto).getID());
-        simT.setNombre(elem.get(punto).getNombre());
         destino = null;
     }
 
-    Expresion(Expresion exp) {
-        elem = exp.elem;
+    public Expresion(Expresion exp) {
+        tokens = new String[exp.tokens.length];
+        for (int i = 0; i < exp.tokens.length; i++) {
+            tokens[i] = exp.tokens[i];
+        }
         punto = exp.punto;
-        simT = exp.simT;
         destino = exp.destino;
     }
 
-    public static boolean iguales(ArrayList<Expresion> listaA, ArrayList<Expresion> listaB) {
-        boolean iguales = true;
-        if (listaA.size() != listaB.size()) {
-            iguales = false;
-        } else {
-            int size = listaB.size();
-            int cont = 0;
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
-                    if (listaA.get(i).equals(listaB.get(j))) {
-                        cont++;
-                    }
+    public final String[] getTokens(ArrayList<INodo> lista) {
+        String nodos = lista.toString();
+        nodos = ". ".concat(nodos);
+        String[] tk = nodos.split(" ");
+        for (int t = 0; t < tk.length; t++) {
+            StringBuilder sb = new StringBuilder(tk[t]);
+            for (int i = 0; i < sb.length(); i++) {
+                String s = String.valueOf(sb.charAt(i));
+                if (Arrays.asList(nulos).contains(s)) {
+                    sb.deleteCharAt(i);
                 }
             }
-            if (cont != size) {
+            tk[t] = sb.toString();
+        }
+        return tk;
+    }
+
+    public int getPunto() {
+        int numP = -1;
+        int pos = 0;
+        boolean encontrado = false;
+        while (!encontrado && pos < tokens.length) {
+            String s = tokens[pos];
+            if (s.equals(".")) {
+                encontrado = true;
+                numP = pos;
+            }
+            pos++;
+        }
+        return numP;
+    }
+
+    public static void clausura(Expresion exp, ArrayList<Expresion> lista) {
+
+    }
+
+    public static boolean sonIguales(ArrayList<Expresion> listaS, ArrayList<Expresion> proto) {
+        boolean iguales = true;
+        if (listaS.isEmpty()) {
+            iguales = false;
+        } else {
+            if (listaS.size() != proto.size()) {
                 iguales = false;
+            } else {
+                int cont = 0;
+                for (int i = 0; i < listaS.size(); i++) {
+                    for (int j = 0; j < proto.size(); j++) {
+                        if (listaS.get(i).equals(proto.get(j))) {
+                            cont++;
+                        }
+                    }
+                }
+                if (cont != listaS.size()) {
+                    iguales = false;
+                }
             }
         }
         return iguales;
@@ -80,7 +118,7 @@ public class Expresion {
         if (punto != obj.punto) {
             iguales = false;
         }
-        if (!INodo.iguales(elem, obj.elem)) {
+        if (!Arrays.equals(tokens, obj.tokens)) {
             iguales = false;
         }
         return iguales;
@@ -89,24 +127,27 @@ public class Expresion {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.elem);
-        hash = 79 * hash + this.punto;
+        hash = 67 * hash + Arrays.deepHashCode(this.tokens);
+        hash = 67 * hash + this.punto;
         return hash;
     }
 
     @Override
     public String toString() {
+        int numP = -1;
         String output = "[";
-        for (int i = 0; i < elem.size(); i++) {
-            if (i == punto) {
-                output = output + " .";
+        for (int i = 0; i < tokens.length; i++) {
+            output = output + " " + tokens[i];
+            if (tokens[i].equals(".")) {
+                numP = i;
             }
-            output = output + " " + elem.get(i);
         }
-        if (punto == elem.size()) {
-            output = output + " .";
+        output = output + " ] => ";
+        if (numP < tokens.length - 1) {
+            output = output + tokens[numP + 1];
+        } else {
+            output = output + " => lambda ";
         }
-        output = output + " ] => " + simT;
         if (destino != null) {
             output = output + " => " + destino.nombre;
         } else {

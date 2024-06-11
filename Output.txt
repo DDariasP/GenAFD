@@ -1,0 +1,3 @@
+[Row: 3][Column: 2][Kind: 3] Comment
+[Row: 3][Column: 10][Kind: 5] ::=
+[Row: 3][Column: 14][Kind: 4] 'b'
