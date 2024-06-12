@@ -2,6 +2,7 @@ package proleg.puntos;
 
 import java.util.Arrays;
 import proleg.ast.*;
+import proleg.lexico.*;
 
 /**
  *
@@ -9,11 +10,12 @@ import proleg.ast.*;
  */
 public class Tupla {
 
-    public static int C = 0;
     public static Tupla eof = new Tupla("eof", -1);
+    public static Tupla lambda = new Tupla("lambda", -1);
     public static String[] listaL = {"*(", "+(", "?("};
     public static String[] listaR = {")*", ")+", ")?"};
     public String sym;
+    public int symID;
     public boolean terminal;
     public int pos;
     public Tupla par;
@@ -21,122 +23,111 @@ public class Tupla {
 
     public Tupla(String s, int n) {
         sym = s;
-        if (Arrays.asList(Operacion.lista).contains(sym)) {
-            terminal = false;
-        } else {
-            terminal = true;
+        switch (sym) {
+            case "*(":
+            case ")*":
+                symID = MyConstants.STAR;
+                break;
+            case "+(":
+            case ")+":
+                symID = MyConstants.PLUS;
+                break;
+            case "?(":
+            case ")?":
+                symID = MyConstants.HOOK;
+                break;
+            default:
+                symID = MyConstants.SYMBOL;
         }
+        terminal = !Arrays.asList(Operacion.lista).contains(sym);
         pos = n;
         par = null;
         paired = false;
     }
 
-    public static void asociarPar(Tupla[] tokens) {
-        Tupla sig = tokens[0];
+    public static void asociarPar(Tupla[] array) {
+        Tupla sig = array[0];
         int puntero = 0;
         Tupla lastL = null;
         Tupla firstR = null;
-        System.out.println(Arrays.toString(tokens));
-        avanza(tokens, puntero, lastL, firstR, sig);
+        avanza(array, puntero, lastL, firstR, sig);
     }
 
-    private static void avanza(Tupla[] tokens, int puntero,
+    private static void avanza(Tupla[] array, int puntero,
             Tupla lastL, Tupla firstR, Tupla sig) {
-        System.out.println(C + "-avan");
-        System.out.println(sig);
-        C++;
         if (sig != eof) {
             if (Arrays.asList(listaL).contains(sig.sym)) {
-                guardaL(tokens, puntero, lastL, firstR, sig);
+                guardaL(array, puntero, lastL, firstR, sig);
             } else if (Arrays.asList(listaR).contains(sig.sym)) {
-                paraR(tokens, puntero, lastL, firstR, sig);
+                paraR(array, puntero, lastL, firstR, sig);
             } else {
                 puntero++;
-                if (puntero < tokens.length) {
-                    sig = tokens[puntero];
+                if (puntero < array.length) {
+                    sig = array[puntero];
                 } else {
                     sig = eof;
                 }
-                avanza(tokens, puntero, lastL, firstR, sig);
+                avanza(array, puntero, lastL, firstR, sig);
             }
         }
     }
 
-    private static void guardaL(Tupla[] tokens, int puntero,
+    private static void guardaL(Tupla[] array, int puntero,
             Tupla lastL, Tupla firstR, Tupla sig) {
-        System.out.println(C + "-guar");
-        System.out.println(sig);
-        C++;
-        lastL = tokens[puntero];
+        lastL = array[puntero];
         puntero++;
-        if (puntero < tokens.length) {
-            sig = tokens[puntero];
+        if (puntero < array.length) {
+            sig = array[puntero];
         } else {
             sig = eof;
         }
-        avanza(tokens, puntero, lastL, firstR, sig);
+        avanza(array, puntero, lastL, firstR, sig);
     }
 
-    private static void paraR(Tupla[] tokens, int puntero,
+    private static void paraR(Tupla[] array, int puntero,
             Tupla lastL, Tupla firstR, Tupla sig) {
-        System.out.println(C + "-para");
-        System.out.println(sig);
-        C++;
         firstR = sig;
-        retrocede(tokens, puntero, lastL, firstR, sig);
+        retrocede(array, puntero, lastL, firstR, sig);
         puntero++;
-        if (puntero < tokens.length) {
-            sig = tokens[puntero];
+        if (puntero < array.length) {
+            sig = array[puntero];
         } else {
             sig = eof;
         }
-        avanza(tokens, puntero, lastL, firstR, sig);
+        avanza(array, puntero, lastL, firstR, sig);
     }
 
-    private static void retrocede(Tupla[] tokens, int puntero,
-            Tupla lastL, Tupla firstR, Tupla sig) {
-        System.out.println(C + "-retr");
-        System.out.println(sig);
-        C++;
+    private static void retrocede(Tupla[] array, int puntero,
+            Tupla lastL, Tupla firstR, Tupla ante) {
         puntero--;
-        sig = tokens[puntero];
-        System.out.println(sig);
+        ante = array[puntero];
         boolean encontrado = false;
         while (!encontrado) {
-            if (!Arrays.asList(listaL).contains(sig.sym)) {
-                System.out.println("no L");
-                System.out.println(sig);
+            if (!Arrays.asList(listaL).contains(ante.sym)) {
                 puntero--;
-                sig = tokens[puntero];
+                ante = array[puntero];
             } else {
-                System.out.println("si L");
-                System.out.println(sig);
-                System.out.println(firstR);
-                if (sig.sym.charAt(0) == firstR.sym.charAt(1)
-                        && !sig.paired) {
+                if (ante.sym.charAt(0) == firstR.sym.charAt(1)
+                        && !ante.paired) {
                     encontrado = true;
                 } else {
                     puntero--;
-                    sig = tokens[puntero];
+                    ante = array[puntero];
                 }
 
             }
         }
-        firstR.par = sig;
+        firstR.par = ante;
         firstR.paired = true;
-        sig.par = firstR;
-        sig.paired = true;
-        System.out.println("");
-        System.out.println(sig);
-        System.out.println(firstR);
-        System.out.println("");
+        ante.par = firstR;
+        ante.paired = true;
     }
 
     @Override
     public String toString() {
-        String output = "< " + sym + "," + pos;
+        String output = "< " + sym + " / " + pos;
         if (par != null) {
-            output = output + ",[" + par.sym + "," + par.pos + "]";
+            output = output + " / <" + par.sym + "/" + par.pos + ">";
         }
         output = output + " >";
         return output;

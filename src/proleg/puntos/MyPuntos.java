@@ -13,32 +13,18 @@ import java.util.Arrays;
  */
 public class MyPuntos implements MyConstants {
 
-    private ArrayList<Estado> listaS;
+    private ArrayList<Expresion> listaCanon;
 
     MyPuntos(AST ast) {
 
-        
-        
-        
-        
-        
-        //lista de Estado del ARPV
-        listaS = new ArrayList<>();
+        //lista de Expresion del algoritmo
+        listaCanon = new ArrayList<>();
         //Expresion inicial
         Expresion exp0 = new Expresion(ast);
-        //Estado inicial
-        Estado s0 = new Estado();
-        s0.elem.add(exp0);
 
-        System.out.println("");
-        System.out.println(s0);
-        System.out.println("");
+        //lista de Expresion canonicas
+        Expresion.transiciones(exp0,listaCanon);
+
         
-                System.out.println("");
-        System.out.println(s0.elem.get(0).vectorNT);
-        System.out.println("");
-
-
-
     }
 }
