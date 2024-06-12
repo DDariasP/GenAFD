@@ -1,4 +1,4 @@
-package proleg.arpv;
+package proleg.puntos;
 
 import proleg.ast.*;
 import java.util.ArrayList;
@@ -12,12 +12,14 @@ public class Expresion {
 
     public static String[] nulos = {"[", "]", ","};
     public String[] tokens;
+    public ArrayList<Tupla> vectorNT;
     public int punto;
     public Estado destino;
 
     public Expresion(AST ast) {
         ArrayList<INodo> lista = ast.arbol.getListaH();
         tokens = getTokens(lista);
+        vectorNT = getVectorNT(tokens);
         punto = 0;
         destino = null;
     }
@@ -46,6 +48,21 @@ public class Expresion {
             tk[t] = sb.toString();
         }
         return tk;
+    }
+
+    public final ArrayList<Tupla> getVectorNT(String[] tokens) {
+        ArrayList<Tupla> symNT = new ArrayList<>();
+        for (int i = 0; i < tokens.length; i++) {
+            String tk = tokens[i];
+            Tupla tp = new Tupla(tk, i);
+            symNT.add(tp);
+        }
+        Tupla[] vector = symNT.toArray(Tupla[]::new);
+        Tupla.asociarPar(vector);
+
+        System.out.println(symNT);
+
+        return symNT;
     }
 
     public int getPunto() {

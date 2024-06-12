@@ -14,7 +14,7 @@ public class AST {
     public INodo arbol;
 
     public AST() {
-        arbol = new Inicial();
+        arbol = new Operacion();
     }
 
     public void print() {

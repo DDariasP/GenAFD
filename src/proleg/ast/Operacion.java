@@ -9,6 +9,7 @@ import proleg.lexico.*;
  */
 public class Operacion implements INodo {
 
+    public static String[] lista = {"*(", ")*", "+(", ")+", "?(", ")?"};
     private static boolean terminal = false;
     private int ID;
     private String nombre;
@@ -94,7 +95,7 @@ public class Operacion implements INodo {
             case MyConstants.STAR:
             case MyConstants.PLUS:
             case MyConstants.HOOK:
-                output = "( ";
+                output = nombre + "( ";
                 for (int i = 0; i < hijos.size(); i++) {
                     output = output + hijos.get(i) + " ";
                 }

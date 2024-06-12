@@ -1,4 +1,4 @@
-package proleg.arpv;
+package proleg.puntos;
 
 import java.io.*;
 import proleg.semantico.*;
@@ -10,7 +10,7 @@ import proleg.sintactico.*;
  * @author Diego Francisco Darias Pino
  *
  */
-public class MyCompilerARPV {
+public class MyCompilerPuntos {
 
     /**
      * Punto de entrada de la aplicacion
@@ -24,7 +24,7 @@ public class MyCompilerARPV {
         MyETDSDesc parser = new MyETDSDesc();
         if (parser.parse(mainfile)) {
             System.out.println("Correcto");
-            MyARPV arpv = new MyARPV(parser.getAST());
+            MyPuntos arpv = new MyPuntos(parser.getAST());
         } else {
             System.out.println("Incorrecto");
         }
