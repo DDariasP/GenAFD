@@ -1,0 +1,14 @@
+[Row: 3][Column: 2][Kind: 3] Comment
+[Row: 3][Column: 10][Kind: 5] ::=
+[Row: 3][Column: 14][Kind: 4] 'd'
+[Row: 3][Column: 18][Kind: 8] (
+[Row: 3][Column: 20][Kind: 4] 'a'
+[Row: 3][Column: 24][Kind: 6] |
+[Row: 3][Column: 26][Kind: 4] 'b'
+[Row: 3][Column: 30][Kind: 9] )
+[Row: 3][Column: 32][Kind: 8] (
+[Row: 3][Column: 34][Kind: 4] 'a'
+[Row: 3][Column: 38][Kind: 9] )
+[Row: 3][Column: 39][Kind: 10] *
+[Row: 3][Column: 41][Kind: 7] ;
+[Row: 5][Column: 0][Kind: 0] 

@@ -11,7 +11,8 @@ import proleg.lexico.*;
 public class Operador implements INodo {
 
     //Lista de simbolos de operadores
-    public static String[] lista = {"*(", ")*", "+(", ")+", "?(", ")?"};
+    public static String[] lista
+            = {"*(", ")*", "+(", ")+", "?(", ")?", "|(", "|", ")|"};
     private static boolean terminal = false;
     private int ID;
     private String nombre;
@@ -70,9 +71,17 @@ public class Operador implements INodo {
     public String toString() {
         String output = "";
         switch (ID) {
-            //Muestra cada tipo de operador de una forma diferente
+            //Muestra cada tipo de operador con su simbolo
             case MyConstants.OR:
                 output = nombre;
+                break;
+            case MyConstants.LPAREN:
+            case MyConstants.RPAREN:
+                output = "|( ";
+                for (int i = 0; i < hijos.size(); i++) {
+                    output = output + hijos.get(i) + " ";
+                }
+                output = output + ")|";
                 break;
             case MyConstants.STAR:
             case MyConstants.PLUS:

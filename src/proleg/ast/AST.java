@@ -69,6 +69,8 @@ public class AST {
             //Los operadores aplicados a expresiones regulares
             //son todos de la subclase Operador
             case MyConstants.OR:
+            case MyConstants.LPAREN:
+            case MyConstants.RPAREN:
             case MyConstants.STAR:
             case MyConstants.PLUS:
             case MyConstants.HOOK:

@@ -20,6 +20,10 @@ public class MyPuntos implements MyConstants {
         listaCanon = new ArrayList<>();
         //Expresion inicial
         Expresion exp0 = new Expresion(ast);
+        for (int i = 0; i < exp0.vector.size(); i++) {
+            Tupla tp = exp0.vector.get(i);
+            System.out.println(tp);
+        }
 
         //lista de Expresion canonicas
         Expresion.transiciones(exp0,listaCanon);

@@ -1,6 +1,5 @@
 
   /* Expresión regular que describe un comentario multilinea: b=barra, a=asterisco, o=otro */
 
-  Comment ::= 'd' (  ( 'a' 'b' ( 'o' )* )+ 'b' ( 'a' )* )? 'o' ;
-
+  Comment ::= 'd' ( 'a' | 'b' ) ( 'a' )* ;
 
