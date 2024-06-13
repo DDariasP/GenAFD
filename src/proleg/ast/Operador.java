@@ -4,18 +4,20 @@ import java.util.ArrayList;
 import proleg.lexico.*;
 
 /**
+ * Clase para los operadores y el nodo raiz
  *
  * @author Diego Francisco Darias Pino
  */
-public class Operacion implements INodo {
+public class Operador implements INodo {
 
+    //Lista de simbolos de operadores
     public static String[] lista = {"*(", ")*", "+(", ")+", "?(", ")?"};
     private static boolean terminal = false;
     private int ID;
     private String nombre;
     private ArrayList<INodo> hijos;
 
-    public Operacion() {
+    public Operador() {
         hijos = new ArrayList<>();
     }
 
@@ -65,30 +67,10 @@ public class Operacion implements INodo {
     }
 
     @Override
-    public boolean igual(INodo n) {
-        if (n == this) {
-            return true;
-        }
-
-        if (!(n instanceof Operacion)) {
-            return false;
-        }
-
-        Operacion obj = (Operacion) n;
-        boolean iguales = true;
-        if (ID != obj.ID) {
-            iguales = false;
-        }
-        if (!nombre.equals(obj.nombre)) {
-            iguales = false;
-        }
-        return iguales;
-    }
-
-    @Override
     public String toString() {
         String output = "";
         switch (ID) {
+            //Muestra cada tipo de operador de una forma diferente
             case MyConstants.OR:
                 output = nombre;
                 break;

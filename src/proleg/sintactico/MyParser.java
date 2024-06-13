@@ -1,8 +1,8 @@
 package proleg.sintactico;
 
+import proleg.lexico.*;
 import java.io.File;
 import java.io.IOException;
-import proleg.lexico.*;
 
 /**
  * Analizador sintactico basado en una gramatica BNF y LL(1)
@@ -33,7 +33,9 @@ public class MyParser implements MyConstants {
     public boolean parse(File file) throws IOException, SintaxException {
         this.lexer = new MyLexer(file);
         this.nextToken = lexer.getNextToken();
+        //Comienza por el simbolo inicial
         parseF();
+        //Si ha llegado a EOF, es correcto
         if (nextToken.getKind() == EOF) {
             return true;
         } else {
@@ -56,13 +58,15 @@ public class MyParser implements MyConstants {
     }
 
     /**
-     * Analiza el simbolo <F>
+     * Analiza el simbolo inicial <F>
      *
      * @throws SintaxException
      */
     private void parseF() throws SintaxException {
+        //Comienza por el identificador de la expresion
         int[] expected = {ID};
         switch (nextToken.getKind()) {
+            //Parte derecha de la regla
             case ID:
                 match(ID);
                 match(EQ);
@@ -82,6 +86,7 @@ public class MyParser implements MyConstants {
     private void parseE() throws SintaxException {
         int[] expected = {SYMBOL, RPAREN, SEMI, LPAREN};
         switch (nextToken.getKind()) {
+            //Parte derecha de la regla
             case SYMBOL:
             case RPAREN:
             case SEMI:
@@ -102,6 +107,7 @@ public class MyParser implements MyConstants {
     private void parseAA() throws SintaxException {
         int[] expected = {OR, SEMI, RPAREN};
         switch (nextToken.getKind()) {
+            //Parte derecha de la regla
             case OR:
                 match(OR);
                 parseD();
@@ -123,6 +129,7 @@ public class MyParser implements MyConstants {
     private void parseD() throws SintaxException {
         int[] expected = {SYMBOL, LPAREN};
         switch (nextToken.getKind()) {
+            //Parte derecha de la regla
             case SYMBOL:
             case LPAREN:
                 parseB();
@@ -141,6 +148,7 @@ public class MyParser implements MyConstants {
     private void parseBB() throws SintaxException {
         int[] expected = {SYMBOL, LPAREN, OR, SEMI, RPAREN};
         switch (nextToken.getKind()) {
+            //Parte derecha de la regla
             case SYMBOL:
             case LPAREN:
                 parseB();
@@ -163,6 +171,7 @@ public class MyParser implements MyConstants {
     private void parseB() throws SintaxException {
         int[] expected = {SYMBOL, LPAREN};
         switch (nextToken.getKind()) {
+            //Parte derecha de la regla
             case SYMBOL:
                 match(SYMBOL);
                 break;
@@ -185,6 +194,7 @@ public class MyParser implements MyConstants {
     private void parseO() throws SintaxException {
         int[] expected = {STAR, PLUS, HOOK, SYMBOL, LPAREN, OR, SEMI, RPAREN};
         switch (nextToken.getKind()) {
+            //Parte derecha de la regla
             case STAR:
                 match(STAR);
                 break;

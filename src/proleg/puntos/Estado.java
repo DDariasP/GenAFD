@@ -3,7 +3,8 @@ package proleg.puntos;
 import java.util.ArrayList;
 
 /**
- *
+ * Clase que define los estados del AFD
+ * 
  * @author Diego Francisco Darias Pino
  */
 public class Estado {

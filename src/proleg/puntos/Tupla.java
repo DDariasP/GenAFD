@@ -1,12 +1,13 @@
 package proleg.puntos;
 
-import java.util.Arrays;
 import proleg.ast.*;
 import proleg.lexico.*;
+import java.util.Arrays;
 
 /**
+ * Clase para la informacion de cada token
  *
- * @author diego
+ * @author Diego Francisco Darias Pino
  */
 public class Tupla {
 
@@ -39,7 +40,7 @@ public class Tupla {
             default:
                 symID = MyConstants.SYMBOL;
         }
-        terminal = !Arrays.asList(Operacion.lista).contains(sym);
+        terminal = !Arrays.asList(Operador.lista).contains(sym);
         pos = n;
         par = null;
         paired = false;

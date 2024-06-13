@@ -1,12 +1,12 @@
 Comment
 |---Base: 'd'
-|---Operacion: ?
-|       |---Operacion: +
+|---Operador: ?
+|       |---Operador: +
 |       |       |---Base: 'a'
 |       |       |---Base: 'b'
-|       |       |---Operacion: *
+|       |       |---Operador: *
 |       |       |       |---Base: 'o'
 |       |---Base: 'b'
-|       |---Operacion: *
+|       |---Operador: *
 |       |       |---Base: 'a'
 |---Base: 'o'

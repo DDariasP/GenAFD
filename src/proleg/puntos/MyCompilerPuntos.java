@@ -1,11 +1,11 @@
 package proleg.puntos;
 
-import java.io.*;
 import proleg.semantico.*;
 import proleg.sintactico.*;
+import java.io.*;
 
 /**
- * Clase que desarrolla el punto de entrada al compilador.
+ * Clase que lanza el algoritmo de puntos
  *
  * @author Diego Francisco Darias Pino
  *
@@ -21,9 +21,11 @@ public class MyCompilerPuntos {
      */
     public static void main(String[] args) throws IOException, SintaxException {
         File mainfile = new File("Ejemplo.txt");
+        //Comienza creando el arbol
         MyETDSDesc parser = new MyETDSDesc();
         if (parser.parse(mainfile)) {
             System.out.println("Correcto");
+            //Inicia el algoritmo
             MyPuntos arpv = new MyPuntos(parser.getAST());
         } else {
             System.out.println("Incorrecto");

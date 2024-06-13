@@ -3,10 +3,9 @@ package proleg.puntos;
 import proleg.ast.*;
 import proleg.lexico.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
- * Analizador sintactico basado en una gramatica BNF y LL(1)
+ * Algoritmo de transformación de expresiones regulares en AFD
  *
  * @author Diego Francisco Darias Pino
  *

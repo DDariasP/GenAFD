@@ -3,7 +3,7 @@ package proleg.sintactico;
 import java.io.*;
 
 /**
- * Clase que desarrolla el punto de entrada al compilador.
+ * Clase que desarrolla el analisis sintactico
  *
  * @author Diego Francisco Darias Pino
  *
@@ -18,6 +18,7 @@ public class MyCompilerSin {
     public static void main(String[] args) {
         File mainfile = new File("Ejemplo.txt");
         try {
+            //Lanza el analizador sintactico
             MyParser parser = new MyParser();
             if (parser.parse(mainfile)) {
                 printOutput("Correcto");
@@ -60,7 +61,6 @@ public class MyCompilerSin {
     /**
      * Genera el fichero de salida
      *
-     * @param e Error a mostrar
      */
     private static void printOutput(String msg) {
         try {

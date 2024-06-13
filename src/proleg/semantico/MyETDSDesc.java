@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Analizador sintactico basado en una gramatica BNF y LL(1)
+ * Analizador semantico basado ETDS descendente
  *
  * @author Diego Francisco Darias Pino
  *
@@ -24,18 +24,23 @@ public class MyETDSDesc implements MyConstants {
      */
     private Token nextToken;
 
+    /*
+     * Arbol Sintactico Abstracto
+     */
     private AST ast;
 
     /**
      * Metodo de analisis de un fichero
      *
      * @param file Fichero a analizar
-     * @return Resultado del analisis sintactico
+     * @return Resultado del analisis semantico
      * @throws java.io.IOException
      * @throws proleg.sintactico.SintaxException
      */
     public boolean parse(File file) throws IOException, SintaxException {
+        //Crea un arbol vacio
         ast = new AST();
+        //La raiz del arbol es el simbolo inicial
         INodo F_h = ast.arbol;
         this.lexer = new MyLexer(file);
         this.nextToken = lexer.getNextToken();
@@ -157,7 +162,7 @@ public class MyETDSDesc implements MyConstants {
             case LPAREN:
                 System.out.println("B-E");
                 Token tk2 = match(LPAREN);
-                Operacion B2_s = new Operacion();
+                Operador B2_s = new Operador();
                 B2_s.setID(tk2.getKind());
                 B2_s.setNombre(tk2.getLexeme());
                 INodo E_s = parseE(B2_s);
@@ -255,7 +260,7 @@ public class MyETDSDesc implements MyConstants {
             case OR:
                 System.out.println("AA-or");
                 Token tk1 = match(OR);
-                Operacion AA1_s = new Operacion();
+                Operador AA1_s = new Operador();
                 AA1_s.setID(tk1.getKind());
                 AA1_s.setNombre(tk1.getLexeme());
                 AA_h.addHijo(AA1_s);
@@ -274,6 +279,11 @@ public class MyETDSDesc implements MyConstants {
         return AA_s;
     }
 
+    /**
+     * Metodo para consultar el arbol
+     *
+     * @return arbol
+     */
     public AST getAST() {
         return ast;
     }

@@ -1,3 +1,0 @@
-[File Ejemplo.txt] 1 error found:
-Error lexico: caracter f [Fila 3, Column 18]
-

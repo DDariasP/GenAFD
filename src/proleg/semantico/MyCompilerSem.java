@@ -3,7 +3,7 @@ package proleg.semantico;
 import java.io.*;
 
 /**
- * Clase que desarrolla el punto de entrada al compilador.
+ * Clase que desarrolla el analisis semantico
  *
  * @author Diego Francisco Darias Pino
  *
@@ -18,6 +18,7 @@ public class MyCompilerSem {
     public static void main(String[] args) {
         File mainfile = new File("Ejemplo.txt");
         try {
+            //Lanza el analizador semantico
             MyETDSDesc parser = new MyETDSDesc();
             if (parser.parse(mainfile)) {
                 printOutput("Correcto");
@@ -60,7 +61,6 @@ public class MyCompilerSem {
     /**
      * Genera el fichero de salida
      *
-     * @param e Error a mostrar
      */
     private static void printOutput(String msg) {
         try {

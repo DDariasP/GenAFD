@@ -1,12 +1,13 @@
 package proleg.puntos;
 
 import proleg.ast.*;
+import proleg.lexico.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
-import proleg.lexico.*;
 
 /**
+ * Clase que define las expresiones a analizar
  *
  * @author Diego Francisco Darias Pino
  */
@@ -78,7 +79,7 @@ public class Expresion {
             System.out.println("");
             System.out.println(exp);
             System.out.println("");
-            if (exp.punto < exp.vector.size()-1) {
+            if (exp.punto < exp.vector.size() - 1) {
                 Expresion sig = new Expresion(exp);
                 transiciones(sig, listaCanon);
             }
