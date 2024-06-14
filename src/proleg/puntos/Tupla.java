@@ -11,14 +11,14 @@ import java.util.Arrays;
  */
 public class Tupla {
 
-    public static Tupla eof = new Tupla("eof", -1);
-    public static Tupla lambda = new Tupla("lambda", -1);
-    public static String[] listaL = {"*(", "+(", "?("};
-    public static String[] listaR = {")*", ")+", ")?"};
-    public String sym;
-    public int symID;
-    public boolean terminal;
-    public int pos;
+    public static Tupla EOF = new Tupla("eof", -1);
+    public static Tupla LAMBDA = new Tupla("lambda", -1);
+    public static String[] listaL = {"*(", "+(", "?(", "|("};
+    public static String[] listaR = {")*", ")+", ")?", ")|"};
+    public final String sym;
+    public final int symID;
+    public final boolean terminal;
+    public final int pos;
     public Tupla par;
     public boolean paired;
 
@@ -37,6 +37,11 @@ public class Tupla {
             case ")?":
                 symID = MyConstants.HOOK;
                 break;
+            case "|(":
+            case ")|":
+            case "|":
+                symID = MyConstants.OR;
+                break;
             default:
                 symID = MyConstants.SYMBOL;
         }
@@ -46,7 +51,7 @@ public class Tupla {
         paired = false;
     }
 
-    public static void asociarPar(Tupla[] array) {
+    public static void asociarPares(Tupla[] array) {
         Tupla sig = array[0];
         int puntero = 0;
         Tupla lastL = null;
@@ -56,7 +61,7 @@ public class Tupla {
 
     private static void avanza(Tupla[] array, int puntero,
             Tupla lastL, Tupla firstR, Tupla sig) {
-        if (sig != eof) {
+        if (sig != EOF) {
             if (Arrays.asList(listaL).contains(sig.sym)) {
                 guardaL(array, puntero, lastL, firstR, sig);
             } else if (Arrays.asList(listaR).contains(sig.sym)) {
@@ -66,7 +71,7 @@ public class Tupla {
                 if (puntero < array.length) {
                     sig = array[puntero];
                 } else {
-                    sig = eof;
+                    sig = EOF;
                 }
                 avanza(array, puntero, lastL, firstR, sig);
             }
@@ -80,7 +85,7 @@ public class Tupla {
         if (puntero < array.length) {
             sig = array[puntero];
         } else {
-            sig = eof;
+            sig = EOF;
         }
         avanza(array, puntero, lastL, firstR, sig);
     }
@@ -93,7 +98,7 @@ public class Tupla {
         if (puntero < array.length) {
             sig = array[puntero];
         } else {
-            sig = eof;
+            sig = EOF;
         }
         avanza(array, puntero, lastL, firstR, sig);
     }
@@ -122,6 +127,14 @@ public class Tupla {
         firstR.paired = true;
         ante.par = firstR;
         ante.paired = true;
+    }
+
+    public static void asociarOR(Tupla[] array) {
+ 
+        
+        
+        
+        
     }
 
     @Override

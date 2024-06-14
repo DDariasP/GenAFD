@@ -12,22 +12,23 @@ import java.util.ArrayList;
  */
 public class MyPuntos implements MyConstants {
 
-    private ArrayList<Expresion> listaCanon;
-
     MyPuntos(AST ast) {
-
-        //lista de Expresion del algoritmo
-        listaCanon = new ArrayList<>();
         //Expresion inicial
         Expresion exp0 = new Expresion(ast);
-        for (int i = 0; i < exp0.vector.size(); i++) {
-            Tupla tp = exp0.vector.get(i);
-            System.out.println(tp);
+
+//        for (int i = 0; i < exp0.array.size(); i++) {
+//            Tupla tp = exp0.array.get(i);
+//            System.out.println(tp);
+//            System.out.println(tp.symID);
+//        }
+
+        //Estado inicial
+        Estado s0 = new Estado(exp0);
+
+        //Automata completo
+        ArrayList<Estado> AFD = Estado.generarAFD(s0);
+        for (int i = 0; i < AFD.size(); i++) {
+            System.out.println(AFD.get(i));
         }
-
-        //lista de Expresion canonicas
-        Expresion.transiciones(exp0,listaCanon);
-
-        
     }
 }

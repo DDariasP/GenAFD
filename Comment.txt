@@ -1,8 +1,12 @@
 Comment
-|---Base: 'd'
-|---Operador: (
-|       |---Base: 'a'
+|---Base: 'b'
+|---Base: 'a'
+|---Operador: *
+|       |---Operador: *
+|       |       |---Base: 'a'
+|       |---Base: 'o'
 |       |---Operador: |
 |       |---Base: 'b'
-|---Operador: *
+|---Operador: +
 |       |---Base: 'a'
+|---Base: 'b'

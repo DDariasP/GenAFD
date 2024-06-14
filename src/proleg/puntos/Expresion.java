@@ -1,7 +1,6 @@
 package proleg.puntos;
 
 import proleg.ast.*;
-import proleg.lexico.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -13,46 +12,31 @@ import java.util.Objects;
  */
 public class Expresion {
 
-    public static String[] nulos = {"[", "]", ","};
-    public static int NUM = 0;
-    public String id;
+    public static String[] listaNulos = {"[", "]", ","};
+    public int posP;
     public ArrayList<INodo> listaOri;
-    public String[] tokens;
-    public ArrayList<Tupla> vector;
-    public int punto;
+    public ArrayList<Tupla> array;
 
     public Expresion(AST ast) {
-        id = "x" + NUM;
-        NUM++;
+        posP = 0;
         listaOri = ast.arbol.getListaH();
-        tokens = getTokens();
-        vector = getVector(tokens);
-        punto = 0;
+        array = getVector(getTokens());
     }
 
     public Expresion(Expresion exp) {
-        id = "x" + NUM;
-        NUM++;
+        posP = exp.posP + 1;
         listaOri = exp.listaOri;
-        tokens = new String[exp.tokens.length];
-        for (int i = 0; i < exp.tokens.length; i++) {
-            tokens[i] = exp.tokens[i];
-        }
-        tokens[exp.punto] = tokens[exp.punto + 1];
-        tokens[exp.punto + 1] = ".";
-        vector = getVector(tokens);
-        punto = exp.punto + 1;
+        array = exp.array;
     }
 
-    public final String[] getTokens() {
+    private String[] getTokens() {
         String nodos = listaOri.toString();
-        nodos = ". ".concat(nodos);
         String[] tk = nodos.split(" ");
         for (int t = 0; t < tk.length; t++) {
             StringBuilder sb = new StringBuilder(tk[t]);
             for (int i = 0; i < sb.length(); i++) {
                 String s = String.valueOf(sb.charAt(i));
-                if (Arrays.asList(nulos).contains(s)) {
+                if (Arrays.asList(listaNulos).contains(s)) {
                     sb.deleteCharAt(i);
                 }
             }
@@ -61,55 +45,49 @@ public class Expresion {
         return tk;
     }
 
-    public final ArrayList<Tupla> getVector(String[] tokens) {
+    private ArrayList<Tupla> getVector(String[] tokens) {
         ArrayList<Tupla> sym = new ArrayList<>();
         for (int i = 0; i < tokens.length; i++) {
             String tk = tokens[i];
             Tupla tp = new Tupla(tk, i);
             sym.add(tp);
         }
-        Tupla[] array = sym.toArray(Tupla[]::new);
-        Tupla.asociarPar(array);
+        Tupla[] vector = sym.toArray(Tupla[]::new);
+        Tupla.asociarPares(vector);
+        Tupla.asociarOR(vector);
         return sym;
     }
 
-    public static void transiciones(Expresion exp, ArrayList<Expresion> listaCanon) {
-        if (!listaCanon.contains(exp)) {
-            listaCanon.add(exp);
-            System.out.println("");
-            System.out.println(exp);
-            System.out.println("");
-            if (exp.punto < exp.vector.size() - 1) {
-                Expresion sig = new Expresion(exp);
-                transiciones(sig, listaCanon);
+    public static void clausuraLambda(Expresion exp, ArrayList<Expresion> listaCanon) {
+        ArrayList<Tupla> v = exp.array;
+        int p = exp.posP;
+
+        if (p < v.size()) {
+            if (!v.get(p).terminal) {
+
+                if (p < v.size() - 1) {
+                    Expresion sig = new Expresion(exp);
+                    clausuraLambda(sig, listaCanon);
+                }
+            } else {
+                listaCanon.add(exp);
+
             }
-        }
-
-    }
-
-    public static void clausura(Expresion exp0, Tupla sym, ArrayList<Expresion> listaCanon) {
-        switch (sym.symID) {
-            case MyConstants.STAR:
-
-                break;
-            case MyConstants.PLUS:
-                break;
-            case MyConstants.HOOK:
-                break;
-            default:
-                throw new AssertionError();
+        } else {
 
         }
-
     }
 
     public static boolean sonIguales(ArrayList<Expresion> listaS, ArrayList<Expresion> proto) {
         boolean iguales = true;
+
         if (listaS.isEmpty()) {
+
             iguales = false;
         } else {
             if (listaS.size() != proto.size()) {
                 iguales = false;
+
             } else {
                 int cont = 0;
                 for (int i = 0; i < listaS.size(); i++) {
@@ -119,12 +97,21 @@ public class Expresion {
                         }
                     }
                 }
-                if (cont != listaS.size()) {
+                if (cont == 0 || cont != listaS.size()) {
                     iguales = false;
                 }
             }
         }
         return iguales;
+    }
+
+    public static void vertir(ArrayList<Expresion> listaCanon, ArrayList<Expresion> proto) {
+        for (int i = 0; i < proto.size(); i++) {
+            Expresion exp = proto.get(i);
+            if (!contiene(listaCanon, exp)) {
+                listaCanon.add(exp);
+            }
+        }
     }
 
     public static boolean contiene(ArrayList<Expresion> proto, Expresion exp) {
@@ -150,29 +137,31 @@ public class Expresion {
         }
 
         Expresion obj = (Expresion) o;
-        boolean iguales = true;
-        if (!listaOri.equals(obj.listaOri)) {
-            iguales = false;
+
+        if (posP != obj.posP) {
+            return false;
         }
-        if (punto != obj.punto) {
-            iguales = false;
-        }
-        return iguales;
+
+        return listaOri.equals(obj.listaOri);
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 13 * hash + Objects.hashCode(this.listaOri);
-        hash = 13 * hash + this.punto;
+        hash = 29 * hash + this.posP;
+        hash = 29 * hash + Objects.hashCode(this.listaOri);
         return hash;
     }
 
     @Override
     public String toString() {
-        String output = " " + id + ": ";
-        for (int i = 0; i < tokens.length; i++) {
-            output = output + tokens[i] + " ";
+        String output = " ";
+        for (int i = 0; i < array.size(); i++) {
+            Tupla tp = array.get(i);
+            if (i == posP) {
+                output = output + ". ";
+            }
+            output = output + tp.sym + " ";
         }
         return output;
     }
