@@ -26,7 +26,7 @@ public class MyCompilerPuntos {
         if (parser.parse(mainfile)) {
             System.out.println("Correcto");
             //Inicia el algoritmo
-            MyPuntos arpv = new MyPuntos(parser.getAST());
+            MyPuntos.genAFD(parser.getAST());
         } else {
             System.out.println("Incorrecto");
         }
