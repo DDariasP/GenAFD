@@ -15,9 +15,10 @@ public class Tupla {
     public static Tupla LAMBDA = new Tupla("lambda", -1);
     public static String[] listaL = {"*(", "+(", "?(", "|("};
     public static String[] listaR = {")*", ")+", ")?", ")|"};
-    public final String sym;
-    public final boolean terminal;
-    public final int pos;
+    public String sym;
+    public String destino;
+    public boolean terminal;
+    public int pos;
     public Tupla par1, par2, parOR;
     public boolean paired;
 
@@ -29,6 +30,11 @@ public class Tupla {
         par2 = null;
         parOR = null;
         paired = false;
+    }
+
+    public Tupla(String s, String d) {
+        sym = s;
+        destino = d;
     }
 
     public static void asociarPares(Tupla[] array) {

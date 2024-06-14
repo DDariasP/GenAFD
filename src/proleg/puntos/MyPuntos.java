@@ -15,18 +15,13 @@ public class MyPuntos implements MyConstants {
     MyPuntos(AST ast) {
         //Expresion inicial
         Expresion exp0 = new Expresion(ast);
+        //Estado inicial
+        Estado s0 = new Estado(exp0);
 
-        for (int i = 0; i < exp0.array.size(); i++) {
-            Tupla tp = exp0.array.get(i);
-            System.out.println(tp);
+        //Automata completo
+        ArrayList<Estado> AFD = Estado.generarAFD(s0);
+        for (int i = 0; i < AFD.size(); i++) {
+            System.out.println(AFD.get(i));
         }
-//        //Estado inicial
-//        Estado s0 = new Estado(exp0);
-//
-//        //Automata completo
-//        ArrayList<Estado> AFD = Estado.generarAFD(s0);
-//        for (int i = 0; i < AFD.size(); i++) {
-//            System.out.println(AFD.get(i));
-//        }
     }
 }

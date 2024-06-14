@@ -63,7 +63,9 @@ public class Expresion {
         int p = exp.posP;
         if (p < v.size() - 1) {
             if (v.get(p).terminal) {
-                listaCanon.add(exp);
+                if (!listaCanon.contains(exp)) {
+                    listaCanon.add(exp);
+                }
             } else {
                 switch (v.get(p).sym) {
                     case "*(":
@@ -73,26 +75,28 @@ public class Expresion {
                         Reglas.R1(exp, listaCanon);
                         Reglas.R2(exp, listaCanon);
                         break;
-                    case "+(":
                     case "?)":
                         Reglas.R2(exp, listaCanon);
                         break;
                     case "|(":
-                        Reglas.R3(exp, listaCanon);
-                        break;
-                    case "|":
+                        Reglas.R1(exp, listaCanon);
                         Reglas.R4(exp, listaCanon);
                         break;
-                    case ")|":
+                    case "|":
                         Reglas.R5(exp, listaCanon);
+                        break;
+                    case "+(":
+                    case ")|":
+                        Reglas.R1(exp, listaCanon);
                         break;
                     default:
                         throw new AssertionError();
                 }
             }
         } else {
-            listaCanon.add(exp);
-        }
+     if (!listaCanon.contains(exp)) {
+                    listaCanon.add(exp);
+                }        }
     }
 
     public static boolean sonIguales(ArrayList<Expresion> listaS, ArrayList<Expresion> proto) {
@@ -123,10 +127,10 @@ public class Expresion {
     }
 
     public static void vertir(ArrayList<Expresion> listaCanon, ArrayList<Expresion> proto) {
-        for (int i = 0; i < proto.size(); i++) {
-            Expresion exp = proto.get(i);
-            if (!contiene(listaCanon, exp)) {
-                listaCanon.add(exp);
+        for (int i = 0; i < listaCanon.size(); i++) {
+            Expresion exp = listaCanon.get(i);
+            if (!contiene(proto, exp)) {
+                proto.add(exp);
             }
         }
     }
