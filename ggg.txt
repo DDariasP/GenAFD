@@ -1,0 +1,9 @@
+ggg
+|---Operador: (
+|       |---Base: 'a'
+|       |---Operador: (
+|       |       |---Base: 'a'
+|       |       |---Operador: |
+|       |       |---Base: 'b'
+|       |---Operador: |
+|       |---Base: 'b'

@@ -16,38 +16,18 @@ public class Tupla {
     public static String[] listaL = {"*(", "+(", "?(", "|("};
     public static String[] listaR = {")*", ")+", ")?", ")|"};
     public final String sym;
-    public final int symID;
     public final boolean terminal;
     public final int pos;
-    public Tupla par;
+    public Tupla par1, par2, parOR;
     public boolean paired;
 
     public Tupla(String s, int n) {
         sym = s;
-        switch (sym) {
-            case "*(":
-            case ")*":
-                symID = MyConstants.STAR;
-                break;
-            case "+(":
-            case ")+":
-                symID = MyConstants.PLUS;
-                break;
-            case "?(":
-            case ")?":
-                symID = MyConstants.HOOK;
-                break;
-            case "|(":
-            case ")|":
-            case "|":
-                symID = MyConstants.OR;
-                break;
-            default:
-                symID = MyConstants.SYMBOL;
-        }
         terminal = !Arrays.asList(Operador.lista).contains(sym);
         pos = n;
-        par = null;
+        par1 = null;
+        par2 = null;
+        parOR = null;
         paired = false;
     }
 
@@ -123,27 +103,59 @@ public class Tupla {
 
             }
         }
-        firstR.par = ante;
+        firstR.par1 = ante;
         firstR.paired = true;
-        ante.par = firstR;
+        ante.par1 = firstR;
         ante.paired = true;
     }
 
     public static void asociarOR(Tupla[] array) {
- 
-        
-        
-        
-        
+        for (int i = 0; i < array.length; i++) {
+            Tupla buscador = array[i];
+            if (buscador.sym.equals("|(")) {
+                boolean encontrado = false;
+                int pos = i + 1;
+                int contL = 0;
+                int contR = 0;
+                while (!encontrado && pos < array.length) {
+                    Tupla sig = array[pos];
+                    switch (sig.sym) {
+                        case "|(":
+                            contL++;
+                            break;
+                        case ")|":
+                            contR++;
+                            break;
+                        case "|":
+                            if (contL == contR) {
+                                encontrado = true;
+                                buscador.parOR = sig;
+                                buscador.par1.parOR = sig;
+                                sig.par1 = buscador;
+                                sig.par2 = buscador.par1;
+                                sig.paired = true;
+                                break;
+                            }
+                        default:
+                    }
+                    pos++;
+                }
+            }
+        }
     }
 
     @Override
     public String toString() {
-        String output = "< " + sym + " / " + pos;
-        if (par != null) {
-            output = output + " / <" + par.sym + "/" + par.pos + ">";
+        String output = "['" + sym + "'," + pos + "]";
+        if (par1 != null) {
+            output = output + " ['" + par1.sym + "'," + par1.pos + "]";
         }
-        output = output + " >";
+        if (par2 != null) {
+            output = output + " ['" + par2.sym + "'," + par2.pos + "]";
+        }
+        if (parOR != null) {
+            output = output + " ['" + parOR.sym + "'," + parOR.pos + "]";
+        }
         return output;
     }
 

@@ -2,7 +2,7 @@ package proleg;
 
 /**
  * Clase para hacer pruebas
- * 
+ *
  * @author Diego Francisco Darias Pino
  */
 public class Main {
