@@ -49,7 +49,6 @@ public class Estado {
             Expresion.clausuraLambda(exp, listaCanon);
         }
 
-
         //Actualiza el Estado con las expresiones correctas
         s0.listaE = listaCanon;
         //Guarda el Estado inicial
@@ -68,8 +67,10 @@ public class Estado {
         ArrayList<String> listaST = new ArrayList<>();
         for (int i = 0; i < s.listaE.size(); i++) {
             Expresion exp = s.listaE.get(i);
-            String sym = exp.array.get(exp.posP).sym;
-            listaST.add(sym);
+            if (exp.posP < exp.array.size()) {
+                String sym = exp.array.get(exp.posP).sym;
+                listaST.add(sym);
+            }
         }
         //Comprueba las transiciones con cada simbolo
         for (int i = 0; i < listaST.size(); i++) {
@@ -85,6 +86,7 @@ public class Estado {
                 if (sym.equals(st)) {
                     //Genera una nueva expresion consumiendo el simbolo
                     Expresion nuevaE = new Expresion(exp);
+                    nuevaE.posP++;
                     //Hace su clausura lambda
                     ArrayList<Expresion> listaCanon = new ArrayList<>();
                     Expresion.clausuraLambda(nuevaE, proto);

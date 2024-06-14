@@ -21,7 +21,6 @@ public class MyPuntos implements MyConstants {
 //            System.out.println(tp);
 //            System.out.println(tp.symID);
 //        }
-
         //Estado inicial
         Estado s0 = new Estado(exp0);
 

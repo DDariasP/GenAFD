@@ -24,7 +24,7 @@ public class Expresion {
     }
 
     public Expresion(Expresion exp) {
-        posP = exp.posP + 1;
+        posP = exp.posP;
         listaOri = exp.listaOri;
         array = exp.array;
     }
@@ -61,20 +61,37 @@ public class Expresion {
     public static void clausuraLambda(Expresion exp, ArrayList<Expresion> listaCanon) {
         ArrayList<Tupla> v = exp.array;
         int p = exp.posP;
-
-        if (p < v.size()) {
-            if (!v.get(p).terminal) {
-
-                if (p < v.size() - 1) {
-                    Expresion sig = new Expresion(exp);
-                    clausuraLambda(sig, listaCanon);
-                }
-            } else {
+        if (p < v.size() - 1) {
+            if (v.get(p).terminal) {
                 listaCanon.add(exp);
-
+            } else {
+                switch (v.get(p).sym) {
+                    case "*(":
+                    case ")*":
+                    case ")+":
+                    case "?(":
+                        Reglas.R1(exp, listaCanon);
+                        Reglas.R2(exp, listaCanon);
+                        break;
+                    case "+(":
+                    case "?)":
+                        Reglas.R2(exp, listaCanon);
+                        break;
+                    case "|(":
+                        Reglas.R3(exp, listaCanon);
+                        break;
+                    case "|":
+                        Reglas.R4(exp, listaCanon);
+                        break;
+                    case ")|":
+                        Reglas.R5(exp, listaCanon);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
             }
         } else {
-
+            listaCanon.add(exp);
         }
     }
 
@@ -162,6 +179,9 @@ public class Expresion {
                 output = output + ". ";
             }
             output = output + tp.sym + " ";
+        }
+        if (posP == array.size()) {
+            output = output + ". ";
         }
         return output;
     }
