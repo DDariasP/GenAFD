@@ -77,12 +77,12 @@ public class Expresion {
         ArrayList<Tupla> listaTP = exp.nodos;
         //Toma la posicion del punto en la expresion
         int p = exp.posP;
-        //Si el punto todavia puede avanzar
-        if (p < listaTP.size() - 1) {
+        //Si el punto todavia tiene delante un simbolo
+        if (p < listaTP.size()) {
             //Comprueba si el simbolo delante del punto es terminal
             if (listaTP.get(p).terminal) {
                 //Si la expresion no esta repetida, se añade a la lista
-                //resultado de la clausura o lista de expresiones canonicas
+                //resultado de la clausura/lista de expresiones canonicas
                 if (!listaCanon.contains(exp)) {
                     listaCanon.add(exp);
                 }
@@ -98,32 +98,29 @@ public class Expresion {
                         //Saltar delante de su simbolo complementario
                         Reglas.R2(exp, listaCanon);
                         break;
-                    case "?)":
-                        //Saltar delante de su simbolo complementario
-                        Reglas.R2(exp, listaCanon);
+                    case "+(":
+                    case ")?":
+                    case ")|":
+                        //Avanzar una posicion
+                        Reglas.R1(exp, listaCanon);
                         break;
                     case "|(":
                         //Avanzar una posicion
                         Reglas.R1(exp, listaCanon);
-                        //Saltar delante de su '|' enlazado
+                        //Saltar delante de sus '|' enlazados
                         Reglas.R3(exp, listaCanon);
                         break;
                     case "|":
                         //Saltar delante de su parentesis final
                         Reglas.R4(exp, listaCanon);
                         break;
-                    case "+(":
-                    case ")|":
-                        //Avanzar una posicion
-                        Reglas.R1(exp, listaCanon);
-                        break;
                     default:
                         //No deberia haber otros simbolos no terminales
                         throw new AssertionError();
                 }
             }
-        } else //Si el punto ya no puede avanzar, es la expresion final 
-        {   //Si no esta ya en la lista, se añade
+        } else //Si el punto no tiene delante un simbolo 
+        {   //Guarda la expresion como final si no esta repetida
             if (!listaCanon.contains(exp)) {
                 listaCanon.add(exp);
             }

@@ -20,7 +20,7 @@ public class MyCompilerPuntos {
      * @throws proleg.sintactico.SintaxException
      */
     public static void main(String[] args) throws IOException, SintaxException {
-        File mainfile = new File("Ejemplo.txt");
+        File mainfile = new File("Ej1.txt");
         //Comienza creando el arbol
         MyETDSDesc parser = new MyETDSDesc();
         if (parser.parse(mainfile)) {

@@ -24,28 +24,29 @@ public class Reglas {
         Expresion nuevaE = new Expresion(exp);
         ArrayList<Tupla> v = nuevaE.nodos;
         int p = nuevaE.posP;
-        Tupla par = v.get(p).par1;
-        nuevaE.posP = par.pos + 1;
+        Tupla parA = v.get(p).parA;
+        nuevaE.posP = parA.pos + 1;
         Expresion.clausuraLambda(nuevaE, listaCanon);
     }
 
-    // .( x | y ) => ( x | .y )
+    // .|( x | y | z )| => |( x | .y | z )|
+    //                     |( x | y | .z )|
     public static void R3(Expresion exp, ArrayList<Expresion> listaCanon) {
-        Expresion nuevaE = new Expresion(exp);
-        ArrayList<Tupla> v = nuevaE.nodos;
-        int p = nuevaE.posP;
-        Tupla par = v.get(p).parOR;
-        nuevaE.posP = par.pos + 1;
-        Expresion.clausuraLambda(nuevaE, listaCanon);
+        Tupla tp = exp.nodos.get(exp.posP);
+        ArrayList<Tupla> paresOR = tp.paresOR;
+        for (int i = 0; i < paresOR.size(); i++) {
+            Expresion nuevaE = new Expresion(exp);
+            nuevaE.posP = paresOR.get(i).pos + 1;
+            Expresion.clausuraLambda(nuevaE, listaCanon);
+        }
     }
 
-    // ( x. | y ) => ( x | y ).
+    // |( x. | y | z )| => |( x | y | z )|.
+    // |( x | y. | z )| => |( x | y | z )|.
     public static void R4(Expresion exp, ArrayList<Expresion> listaCanon) {
         Expresion nuevaE = new Expresion(exp);
-        ArrayList<Tupla> v = nuevaE.nodos;
-        int p = nuevaE.posP;
-        Tupla par = v.get(p).par2;
-        nuevaE.posP = par.pos + 1;
+        Tupla tp = exp.nodos.get(exp.posP);
+        nuevaE.posP = tp.parB.pos + 1;
         Expresion.clausuraLambda(nuevaE, listaCanon);
     }
 

@@ -1,5 +1,6 @@
 package proleg.puntos;
 
+import java.util.ArrayList;
 import proleg.ast.*;
 import java.util.Arrays;
 
@@ -19,7 +20,8 @@ public class Tupla {
     public String sym;
     public boolean terminal;
     public int pos;
-    public Tupla par1, par2, parOR;
+    Tupla parA, parB;
+    public ArrayList<Tupla> paresOR;
     public boolean paired;
     //Tupla a partir de un Estado
     public String st;
@@ -31,9 +33,7 @@ public class Tupla {
         //Si no es un simbolo Operador, es terminal
         terminal = !Arrays.asList(Operador.lista).contains(sym);
         pos = n;
-        par1 = null;
-        par2 = null;
-        parOR = null;
+        paresOR = new ArrayList<>();
         paired = false;
     }
 
@@ -139,9 +139,9 @@ public class Tupla {
         }
         //Tras encontrar su mitad complementaria, las enlaza
         //y marca ambas como enlazadas
-        firstR.par1 = ante;
+        firstR.parA = ante;
         firstR.paired = true;
-        ante.par1 = firstR;
+        ante.parA = firstR;
         ante.paired = true;
     }
 
@@ -151,15 +151,12 @@ public class Tupla {
             Tupla buscador = array[i];
             //Solo las mitades izquierdas buscan sus partes
             if (buscador.sym.equals("|(")) {
-                boolean encontrado = false;
-                int pos = i + 1;
-                //Recuerda las mitades de su tipo encontradas hasta el momento,
-                //sean o no complementarias
-                int contL = 0;
-                int contR = 0;
-                //Mientras no encuentre sus partes y no llegue al final de la expresion
-                while (!encontrado && pos < array.length) {
-                    Tupla sig = array[pos];
+                for (int j = 0; j < buscador.parA.pos; j++) {
+                    //Recuerda las mitades de su tipo encontradas hasta el momento,
+                    //sean o no complementarias
+                    int contL = 0;
+                    int contR = 0;
+                    Tupla sig = array[j];
                     switch (sig.sym) {
                         //Suma las mitades izquierdas
                         case "|(":
@@ -174,21 +171,20 @@ public class Tupla {
                             //Si ha encontrado el mismo numero de mitades de
                             //cada tipo, el '|' encontrado es su parte intermedia
                             if (contL == contR) {
-                                encontrado = true;
                                 //Se enlaza con el '|'
-                                buscador.parOR = sig;
-                                buscador.par1.parOR = sig;
-                                sig.par1 = buscador;
+                                buscador.paresOR.add(sig);
+                                sig.parA = buscador;
                                 //Enlaza al '|' con su mitad complementaria
-                                sig.par2 = buscador.par1;
+                                buscador.parA.paresOR.add(sig);
+                                sig.parB = buscador.parA;
+                                //marca el '|' como enlazado
                                 sig.paired = true;
                                 break;
                             }
                         default:
                     }
-                    //Si no, sigue avanzando
-                    pos++;
                 }
+                System.out.println(buscador);
             }
         }
     }
@@ -199,14 +195,19 @@ public class Tupla {
     @Override
     public String toString() {
         String output = "['" + sym + "'," + pos + "]";
-        if (par1 != null) {
-            output = output + " ['" + par1.sym + "'," + par1.pos + "]";
+        if (parA != null) {
+            output = output + " ['" + parA.sym + "'," + parA.pos + "]";
         }
-        if (par2 != null) {
-            output = output + " ['" + par2.sym + "'," + par2.pos + "]";
+        if (parB != null) {
+            output = output + " ['" + parB.sym + "'," + parB.pos + "]";
         }
-        if (parOR != null) {
-            output = output + " ['" + parOR.sym + "'," + parOR.pos + "]";
+        if (!paresOR.isEmpty()) {
+            output = output + " [";
+            int tam = paresOR.size() - 1;
+            for (int i = 0; i < tam; i++) {
+                output = output + paresOR.get(i).pos + ", ";
+            }
+            output = output + paresOR.get(tam).pos + "]";
         }
         return output;
     }
